@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TARKIB LEGEND - SDIT Qurratu A'yun</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #ecfdf5; 
+            touch-action: none; 
+            overflow: hidden;
+            user-select: none; 
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+        }
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            line-height: 1.8;
+        }
+        button {
+            touch-action: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+        .pop-in { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .pulse-red { animation: pulseRed 1s infinite; }
+        @keyframes pulseRed {
+            0% { color: #ef4444; }
+            50% { color: #7f1d1d; }
+            100% { color: #ef4444; }
+        }
+        .bg-pattern {
+            background-image: radial-gradient(#10b981 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.1;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // --- SOUND ENGINE ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        const playTone = (freq, type, duration, delay = 0) => {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.value = freq;
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(audioCtx.currentTime + delay);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime + delay);
+            gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + delay + duration);
+            osc.stop(audioCtx.currentTime + delay + duration);
+        };
+
+        const playCorrectSound = () => { playTone(600, 'sine', 0.1); playTone(800, 'sine', 0.2, 0.1); };
+        const playWrongSound = () => { playTone(150, 'sawtooth', 0.3); };
+        const playLevelCompleteSound = () => { playTone(400, 'triangle', 0.1); playTone(500, 'triangle', 0.1, 0.1); playTone(600, 'triangle', 0.1, 0.2); playTone(800, 'triangle', 0.4, 0.3); };
+        const playGrandFanfare = () => { [523, 659, 783, 1046, 783, 1046].forEach((freq, i) => { playTone(freq, 'square', 0.2, i * 0.15); }); };
+
+        // --- VISUAL EFFECTS ---
+        const fireConfetti = (intensity = 1) => {
+            if (typeof confetti === 'undefined') return;
+            if (intensity === 1) {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            } else {
+                var duration = 3000; var end = Date.now() + duration;
+                (function frame() {
+                    confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
+                    confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
+                    if (Date.now() < end) requestAnimationFrame(frame);
+                }());
+            }
+        };
+
+        // --- DATA SOAL KOMPREHENSIF (DOMINASI KOSAKATA SEKOLAH) ---
+        const gameDataDatabase = [
+            // =================================================================
+            // LEVEL 1: FRASA (Kata Benda, Sifat, Tempat, Idhafah)
+            // =================================================================
+            
+            // -- Jar Majrur & Zharaf (Tempat di Sekolah/Rumah) --
+            { level: 1, category: "L1: Jar Majrur", indonesian: "Di dalam kelas", correctWords: ["فِي", "الْفَصْلِ"], distractors: ["عَلَى", "فَصْلٌ"] },
+            { level: 1, category: "L1: Jar Majrur", indonesian: "Di atas meja", correctWords: ["عَلَى", "الْمَكْتَبِ"], distractors: ["فِي", "مَكْتَبٌ"] },
+            { level: 1, category: "L1: Jar Majrur", indonesian: "Di dalam tas", correctWords: ["فِي", "الْحَقِيبَةِ"], distractors: ["عَلَى", "حَقِيبَةٌ"] },
+            { level: 1, category: "L1: Jar Majrur", indonesian: "Di atas kursi", correctWords: ["عَلَى", "الْكُرْسِيِّ"], distractors: ["تَحْتَ", "كُرْسِيٌّ"] },
+            { level: 1, category: "L1: Jar Majrur", indonesian: "Di dalam lemari", correctWords: ["فِي", "الْخِزَانَةِ"], distractors: ["عَلَى", "خِزَانَةٌ"] },
+            { level: 1, category: "L1: Jar Majrur", indonesian: "Dari rumah", correctWords: ["مِنَ", "الْبَيْتِ"], distractors: ["إِلَى", "بَيْتٌ"] },
+            { level: 1, category: "L1: Jar Majrur", indonesian: "Ke sekolah", correctWords: ["إِلَى", "الْمَدْرَسَةِ"], distractors: ["مِنَ", "مَدْرَسَةٌ"] },
+            { level: 1, category: "L1: Jar Majrur", indonesian: "Di atas ranjang", correctWords: ["عَلَى", "السَّرِيرِ"], distractors: ["فِي", "سَرِيرٌ"] },
+            
+            { level: 1, category: "L1: Zharaf", indonesian: "Di depan sekolah", correctWords: ["أَمَامَ", "الْمَدْرَسَةِ"], distractors: ["وَرَاءَ", "مَدْرَسَةٌ"] },
+            { level: 1, category: "L1: Zharaf", indonesian: "Di belakang dapur", correctWords: ["وَرَاءَ", "الْمَطْبَخِ"], distractors: ["أَمَامَ", "مَطْبَخٌ"] },
+            { level: 1, category: "L1: Zharaf", indonesian: "Di samping toko", correctWords: ["جَانِبَ", "الدُّكَّانِ"], distractors: ["أَمَامَ", "دُكَّانٌ"] },
+            { level: 1, category: "L1: Zharaf", indonesian: "Di bawah meja", correctWords: ["تَحْتَ", "الْمَكْتَبِ"], distractors: ["فَوْقَ", "مَكْتَبٌ"] },
+
+            // -- Idhafah (Kepemilikan) --
+            { level: 1, category: "L1: Idhafah", indonesian: "Pintu masjid", correctWords: ["بَابُ", "الْمَسْجِدِ"], distractors: ["الْبَابُ", "مَسْجِدًا"] },
+            { level: 1, category: "L1: Idhafah", indonesian: "Guru (lk) sekolah", correctWords: ["مُدَرِّسُ", "الْمَدْرَسَةِ"], distractors: ["مُدَرِّسٌ", "مَدْرَسَةً"] },
+            { level: 1, category: "L1: Idhafah", indonesian: "Kepala sekolah (pr)", correctWords: ["مُدِيرَةُ", "الْمَدْرَسَةِ"], distractors: ["مُدِيرَةٌ", "مَدْرَسَةٌ"] },
+            { level: 1, category: "L1: Idhafah", indonesian: "Kunci rumah", correctWords: ["مِفْتَاحُ", "الْبَيْتِ"], distractors: ["مِفْتَاحٌ", "بَيْتٌ"] },
+            { level: 1, category: "L1: Idhafah", indonesian: "Kitab Allah", correctWords: ["كِتَابُ", "اللهِ"], distractors: ["كِتَابٌ", "اللهَ"] },
+            { level: 1, category: "L1: Idhafah", indonesian: "Rasul Allah", correctWords: ["رَسُولُ", "اللهِ"], distractors: ["رَسُولٌ", "اللهَ"] },
+
+            // -- Na'at Man'ut (Sifat - Nakirah & Ma'rifah) --
+            { level: 1, category: "L1: Sifat (Nakirah)", indonesian: "Sebuah tas baru", correctWords: ["حَقِيبَةٌ", "جَدِيدَةٌ"], distractors: ["الْحَقِيبَةُ", "الْجَدِيدَةُ"] },
+            { level: 1, category: "L1: Sifat (Nakirah)", indonesian: "Seorang murid yang rajin", correctWords: ["طَالِبٌ", "مُجْتَهِدٌ"], distractors: ["الطَّالِبُ", "الْمُجْتَهِدُ"] },
+            { level: 1, category: "L1: Sifat (Nakirah)", indonesian: "Sebuah pulpen lama", correctWords: ["قَلَمٌ", "قَدِيمٌ"], distractors: ["الْقَلَمُ", "جَدِيدٌ"] },
+            { level: 1, category: "L1: Sifat (Nakirah)", indonesian: "Seorang guru (pr) yang pandai", correctWords: ["مُدَرِّسَةٌ", "مَاهِرَةٌ"], distractors: ["مُدَرِّسٌ", "مَاهِرٌ"] },
+            { level: 1, category: "L1: Sifat (Nakirah)", indonesian: "Kemeja putih", correctWords: ["قَمِيصٌ", "أَبْيَضُ"], distractors: ["قَمِيصًا", "أَسْوَدُ"] },
+            
+            { level: 1, category: "L1: Sifat (Ma'rifah)", indonesian: "Peci yang hitam itu", correctWords: ["الْقَلَنْسُوَةُ", "السَّوْدَاءُ"], distractors: ["قَلَنْسُوَةٌ", "سَوْدَاءُ"] },
+            { level: 1, category: "L1: Sifat (Ma'rifah)", indonesian: "Kemeja yang bersih itu", correctWords: ["الْقَمِيصُ", "النَّظِيفُ"], distractors: ["قَمِيصٌ", "نَظِيفٌ"] },
+            { level: 1, category: "L1: Sifat (Ma'rifah)", indonesian: "Kelas yang luas itu", correctWords: ["الْفَصْلُ", "الْوَاسِعُ"], distractors: ["فَصْلٌ", "وَاسِعٌ"] },
+            { level: 1, category: "L1: Sifat (Ma'rifah)", indonesian: "Sekolah yang besar itu", correctWords: ["الْمَدْرَسَةُ", "الْكَبِيرَةُ"], distractors: ["مَدْرَسَةٌ", "كَبِيرَةٌ"] },
+
+
+            // =================================================================
+            // LEVEL 2: JUMLAH ISMIYAH (Mubtada + Khobar)
+            // =================================================================
+            
+            // -- Khobar Mufrad (Kata Benda/Sifat) --
+            { level: 2, category: "L2: Khobar Mufrad", indonesian: "Dokter itu mahir", correctWords: ["الطَّبِيبُ", "مَاهِرٌ"], distractors: ["مَاهِرَةٌ", "طَبِيبٌ"] },
+            { level: 2, category: "L2: Khobar Mufrad", indonesian: "Gajah itu besar", correctWords: ["الْفِيلُ", "كَبِيرٌ"], distractors: ["صَغِيرٌ", "نَمْلٌ"] },
+            { level: 2, category: "L2: Khobar Mufrad", indonesian: "Apel itu manis", correctWords: ["التُّفَّاحُ", "حُلْوٌ"], distractors: ["مُرٌّ", "حَامِضٌ"] },
+            { level: 2, category: "L2: Khobar Mufrad", indonesian: "Rumah itu luas", correctWords: ["الْبَيْتُ", "وَاسِعٌ"], distractors: ["ضَيِّقٌ", "بَيْتٌ"] },
+            { level: 2, category: "L2: Khobar Mufrad", indonesian: "Lantai itu bersih", correctWords: ["الْبِلَاطُ", "نَظِيفٌ"], distractors: ["وَسِخٌ", "بِلَاطٌ"] },
+            { level: 2, category: "L2: Khobar Mufrad", indonesian: "Kopi itu pahit", correctWords: ["الْقَهْوَةُ", "مُرَّةٌ"], distractors: ["حُلْوَةٌ", "قَهْوَةٌ"] },
+            { level: 2, category: "L2: Khobar Mufrad", indonesian: "Pedagang itu kaya", correctWords: ["التَّاجِرُ", "غَنِيٌّ"], distractors: ["فَقِيرٌ", "تَاجِرٌ"] },
+            { level: 2, category: "L2: Khobar Mufrad", indonesian: "Singa itu kuat", correctWords: ["الْأَسَدُ", "قَوِيٌّ"], distractors: ["ضَعِيفٌ", "أَسَدٌ"] },
+
+            // -- Khobar Syibhul Jumlah (Keterangan Tempat) --
+            { level: 2, category: "L2: Khobar Syibhul Jumlah", indonesian: "Murid di dalam perpustakaan", correctWords: ["الطَّالِبُ", "فِي", "الْمَكْتَبَةِ"], distractors: ["عَلَى", "طَالِبٌ"] },
+            { level: 2, category: "L2: Khobar Syibhul Jumlah", indonesian: "Mobil di depan rumah", correctWords: ["السَّيَّارَةُ", "أَمَامَ", "الْبَيْتِ"], distractors: ["وَرَاءَ", "بَيْتٌ"] },
+            { level: 2, category: "L2: Khobar Syibhul Jumlah", indonesian: "Jam di atas dinding", correctWords: ["السَّاعَةُ", "عَلَى", "الْجِدَارِ"], distractors: ["فِي", "سَاعَةٌ"] },
+            { level: 2, category: "L2: Khobar Syibhul Jumlah", indonesian: "Pakaian di dalam lemari", correctWords: ["الْمَلَابِسُ", "فِي", "الْخِزَانَةِ"], distractors: ["عَلَى", "خِزَانَةٌ"] },
+            { level: 2, category: "L2: Khobar Syibhul Jumlah", indonesian: "Ikan di dalam air", correctWords: ["السَّمَكُ", "فِي", "الْمَاءِ"], distractors: ["عَلَى", "مَاءٌ"] },
+            { level: 2, category: "L2: Khobar Syibhul Jumlah", indonesian: "Piring di atas meja", correctWords: ["الصَّحْنُ", "عَلَى", "الْمَكْتَبِ"], distractors: ["فِي", "صَحْنٌ"] },
+
+            // -- Kalimat Hikmah (Bonus Legend) --
+            { level: 2, category: "L2: Kalimat Hikmah", indonesian: "Sholat itu cahaya", correctWords: ["الصَّلَاةُ", "نُورٌ"], distractors: ["صَلَاةٌ", "نُورًا"] },
+            { level: 2, category: "L2: Kalimat Hikmah", indonesian: "Kebersihan itu sebagian dari iman", correctWords: ["النَّظَافَةُ", "مِنَ", "الْإِيمَانِ"], distractors: ["نَظَافَةٌ", "إِيمَانٌ"] },
+
+
+            // =================================================================
+            // LEVEL 3: JUMLAH FI'LIYAH (Fi'il + Fa'il / Dasar)
+            // =================================================================
+            
+            // -- Fi'il Madhi (Telah) -> Pengecoh: Mudhari --
+            { level: 3, category: "L3: Fi'il Madhi", indonesian: "Zaid telah pergi", correctWords: ["ذَهَبَ", "زَيْدٌ"], distractors: ["يَذْهَبُ", "زَيْدًا"] }, 
+            { level: 3, category: "L3: Fi'il Madhi", indonesian: "Anak (lk) itu telah tidur", correctWords: ["نَامَ", "الْوَلَدُ"], distractors: ["يَنَامُ", "وَلَدًا"] }, 
+            { level: 3, category: "L3: Fi'il Madhi", indonesian: "Ahmad telah minum", correctWords: ["شَرِبَ", "أَحْمَدُ"], distractors: ["يَشْرَبُ", "أَحْمَدَ"] }, 
+            { level: 3, category: "L3: Fi'il Madhi", indonesian: "Hamid telah masuk", correctWords: ["دَخَلَ", "حَامِدٌ"], distractors: ["يَدْخُلُ", "خَرَجَ"] },
+            { level: 3, category: "L3: Fi'il Madhi", indonesian: "Tamu itu telah datang", correctWords: ["جَاءَ", "الضَّيْفُ"], distractors: ["يَجِيءُ", "ضَيْفًا"] },
+            { level: 3, category: "L3: Fi'il Madhi", indonesian: "Anak (lk) itu telah duduk", correctWords: ["جَلَسَ", "الْوَلَدُ"], distractors: ["يَجْلِسُ", "وَلَدٌ"] },
+            { level: 3, category: "L3: Fi'il Madhi", indonesian: "Bayi itu telah tertawa", correctWords: ["ضَحِكَ", "الطِّفْلُ"], distractors: ["يَضْحَكُ", "طِفْلًا"] },
+            { level: 3, category: "L3: Fi'il Madhi", indonesian: "Bapak telah sakit", correctWords: ["مَرِضَ", "الْأَبُ"], distractors: ["يَمْرَضُ", "أَبٌ"] },
+            { level: 3, category: "L3: Fi'il Madhi", indonesian: "Anak-anak telah bermain", correctWords: ["لَعِبَ", "الْأَوْلَادُ"], distractors: ["يَلْعَبُ", "أَوْلَادًا"] },
+            { level: 3, category: "L3: Fi'il Madhi", indonesian: "Zaid telah tinggal (menetap)", correctWords: ["سَكَنَ", "زَيْدٌ"], distractors: ["يَسْكُنُ", "زَيْدًا"] },
+            { level: 3, category: "L3: Fi'il Madhi", indonesian: "Ibu telah memberi izin", correctWords: ["أَذِنَتْ", "الْأُمُّ"], distractors: ["تَأْذَنُ", "أُمًّا"] },
+            { level: 3, category: "L3: Fi'il Madhi", indonesian: "Guru (lk) telah berdiri", correctWords: ["قَامَ", "الْمُدَرِّسُ"], distractors: ["يَقُومُ", "مُدَرِّسًا"] },
+            { level: 3, category: "L3: Fi'il Madhi", indonesian: "Siswa telah lulus (berhasil)", correctWords: ["نَجَحَ", "الطَّالِبُ"], distractors: ["يَنْجَحُ", "طَالِبًا"] },
+
+            // -- Fi'il Mudhari (Sedang) -> Pengecoh: Madhi --
+            { level: 3, category: "L3: Fi'il Mudhari", indonesian: "Fatimah sedang menulis", correctWords: ["تَكْتُبُ", "فَاطِمَةُ"], distractors: ["كَتَبَتْ", "فَاطِمَةَ"] }, 
+            { level: 3, category: "L3: Fi'il Mudhari", indonesian: "Aisyah sedang membaca", correctWords: ["تَقْرَأُ", "عَائِشَةُ"], distractors: ["قَرَأَتْ", "عَائِشَةَ"] }, 
+            { level: 3, category: "L3: Fi'il Mudhari", indonesian: "Zaid sedang berdiri", correctWords: ["يَقُومُ", "زَيْدٌ"], distractors: ["قَامَ", "زَيْدًا"] }, 
+            { level: 3, category: "L3: Fi'il Mudhari", indonesian: "Pegawai itu sedang keluar", correctWords: ["يَخْرُجُ", "الْمُوَظَّفُ"], distractors: ["خَرَجَ", "مُوَظَّفٌ"] },
+            { level: 3, category: "L3: Fi'il Mudhari", indonesian: "Guru (lk) itu sedang menjawab", correctWords: ["يُجِيبُ", "الْمُدَرِّسُ"], distractors: ["أَجَابَ", "مُدَرِّسًا"] },
+            { level: 3, category: "L3: Fi'il Mudhari", indonesian: "Anak (lk) itu sedang menangis", correctWords: ["يَبْكِي", "الْوَلَدُ"], distractors: ["بَكَى", "وَلَدًا"] },
+            { level: 3, category: "L3: Fi'il Mudhari", indonesian: "Siswa itu sedang belajar", correctWords: ["يَدْرُسُ", "الطَّالِبُ"], distractors: ["دَرَسَ", "طَالِبٌ"] },
+            { level: 3, category: "L3: Fi'il Mudhari", indonesian: "Orang muslim sedang berpuasa", correctWords: ["يَصُومُ", "الْمُسْلِمُ"], distractors: ["صَامَ", "مُسْلِمًا"] },
+            { level: 3, category: "L3: Fi'il Mudhari", indonesian: "Ayah sedang bersafar", correctWords: ["يُسَافِرُ", "الْأَبُ"], distractors: ["سَافَرَ", "أَبًا"] },
+            { level: 3, category: "L3: Fi'il Mudhari", indonesian: "Ibu sedang mencuci", correctWords: ["تَغْسِلُ", "الْأُمُّ"], distractors: ["غَسَلَتْ", "أُمًّا"] },
+            { level: 3, category: "L3: Fi'il Mudhari", indonesian: "Fatimah sedang menyeterika", correctWords: ["تَكْوِي", "فَاطِمَةُ"], distractors: ["كَوَتْ", "فَاطِمَةَ"] },
+            { level: 3, category: "L3: Fi'il Mudhari", indonesian: "Anak (lk) sedang mandi", correctWords: ["يَسْتَحِمُّ", "الْوَلَدُ"], distractors: ["اِسْتَحَمَّ", "وَلَدًا"] },
+            { level: 3, category: "L3: Fi'il Mudhari", indonesian: "Pemain sedang berlari", correctWords: ["يَجْرِي", "اللَّاعِبُ"], distractors: ["جَرَى", "لَاعِبًا"] },
+            { level: 3, category: "L3: Fi'il Mudhari", indonesian: "Orang muslim sedang sujud", correctWords: ["يَسْجُدُ", "الْمُسْلِمُ"], distractors: ["سَجَدَ", "مُسْلِمًا"] },
+
+
+            // =================================================================
+            // LEVEL 4: MAHIR (KALIMAT KOMPLEKS / SPOK / LENGKAP)
+            // =================================================================
+            
+            // -- Objek Ma'rifah (Tertentu/Itu) --
+            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Ibu sedang memasak nasi itu", correctWords: ["تَطْبُخُ", "الْأُمُّ", "الرُّزَّ"], distractors: ["طَبَخَتْ", "الرُّزُّ"] }, 
+            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Ahmad telah membuka pintu itu", correctWords: ["فَتَحَ", "أَحْمَدُ", "الْبَابَ"], distractors: ["يَفْتَحُ", "الْبَابُ"] }, 
+            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Fatimah sedang menutup jendela itu", correctWords: ["تُغْلِقُ", "فَاطِمَةُ", "النَّافِذَةَ"], distractors: ["أَغْلَقَ", "النَّافِذَةُ"] }, 
+            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Siswa sedang menghafal pelajaran itu", correctWords: ["يَحْفَظُ", "الطَّالِبُ", "الدَّرْسَ"], distractors: ["حَفِظَ", "الدَّرْسُ"] }, 
+            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Saya sedang melihat bulan itu", correctWords: ["أَنْظُرُ", "الْقَمَرَ"], distractors: ["نَظَرْتُ", "الْقَمَرُ"] }, 
+            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Pedagang sedang menjual baju itu", correctWords: ["يَبِيعُ", "التَّاجِرُ", "الْقَمِيصَ"], distractors: ["بَاعَ", "الْقَمِيصُ"] },
+            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Ayah sedang membeli mobil itu", correctWords: ["يَشْتَرِي", "الْأَبُ", "السَّيَّارَةَ"], distractors: ["اِشْتَرَى", "السَّيَّارَةُ"] },
+            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Pemain sedang memukul bola itu", correctWords: ["يَضْرِبُ", "اللَّاعِبُ", "الْكُرَةَ"], distractors: ["ضَرَبَ", "الْكُرَةُ"] },
+            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Ibu sedang membersihkan rumah itu", correctWords: ["تُنَظِّفُ", "الْأُمُّ", "الْبَيْتَ"], distractors: ["نَظَّفَتْ", "الْبَيْتُ"] },
+            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Kucing itu sedang makan ikan itu", correctWords: ["يَأْكُلُ", "الْقِطُّ", "السَّمَكَ"], distractors: ["أَكَلَ", "سَمَكًا"] },
+            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Petani (lk) telah menanam jagung itu", correctWords: ["زَرَعَ", "الْفَلَّاحُ", "الذُّرَةَ"], distractors: ["يَزْرَعُ", "ذُرَةٌ"] },
+            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Kita telah makan nasi itu", correctWords: ["أَكَلْنَا", "الرُّزَّ"], distractors: ["نَأْكُلُ", "رُزًّا"] },
+            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Ayah telah memasukkan mobil itu", correctWords: ["أَدْخَلَ", "الْأَبُ", "السَّيَّارَةَ"], distractors: ["يُدْخِلُ", "سَيَّارَةً"] },
+            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Saya telah memadamkan lampu itu", correctWords: ["أَطْفَأْتُ", "الْمِصْبَاحَ"], distractors: ["أُطْفِئُ", "مِصْبَاحًا"] },
+            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Siswa telah mengambil pena itu", correctWords: ["أَخَذَ", "الطَّالِبُ", "الْقَلَمَ"], distractors: ["يَأْخُذُ", "قَلَمًا"] },
+
+            // -- Objek Nakirah (Umum/Sebuah) --
+            { level: 4, category: "L4: Objek Nakirah", indonesian: "Saya sedang membaca sebuah buku", correctWords: ["أَقْرَأُ", "كِتَابًا"], distractors: ["قَرَأْتُ", "كِتَابٌ"] }, 
+            { level: 4, category: "L4: Objek Nakirah", indonesian: "Saya sedang membuka sebuah pintu", correctWords: ["أَفْتَحُ", "بَابًا"], distractors: ["فَتَحْتُ", "بَابٌ"] }, 
+            { level: 4, category: "L4: Objek Nakirah", indonesian: "Ayah sedang membeli sebuah mobil", correctWords: ["يَشْتَرِي", "الْأَبُ", "سَيَّارَةً"], distractors: ["اِشْتَرَى", "سَيَّارَةٌ"] },
+            { level: 4, category: "L4: Objek Nakirah", indonesian: "Siswa sedang menulis sebuah pelajaran", correctWords: ["يَكْتُبُ", "الطَّالِبُ", "دَرْسًا"], distractors: ["كَتَبَ", "دَرْسٌ"] },
+            { level: 4, category: "L4: Objek Nakirah", indonesian: "Ibu sedang memasak makanan", correctWords: ["تَطْبُخُ", "الْأُمُّ", "طَعَامًا"], distractors: ["طَعَامٌ", "طَبَخَتْ"] },
+            { level: 4, category: "L4: Objek Nakirah", indonesian: "Pedagang sedang menjual kemeja baru", correctWords: ["يَبِيعُ", "التَّاجِرُ", "قَمِيصًا", "جَدِيدًا"], distractors: ["قَمِيصٌ", "جَدِيدٌ"] },
+            { level: 4, category: "L4: Objek Nakirah", indonesian: "Zaid sedang meminum kopi panas", correctWords: ["يَشْرَبُ", "زَيْدٌ", "قَهْوَةً", "حَارَّةً"], distractors: ["شَرِبَ", "حَارٌّ"] },
+            { level: 4, category: "L4: Objek Nakirah", indonesian: "Saya sedang minum air dingin", correctWords: ["أَشْرَبُ", "مَاءً", "بَارِدًا"], distractors: ["شَرِبْتُ", "مَاءً"] },
+            { level: 4, category: "L4: Objek Nakirah", indonesian: "Guru (lk) sedang membawa buku baru", correctWords: ["يَحْمِلُ", "الْمُدَرِّسُ", "كِتَابًا", "جَدِيدًا"], distractors: ["حَمَلَ", "كِتَابٌ"] },
+            { level: 4, category: "L4: Objek Nakirah", indonesian: "Zaid sedang menyalakan api", correctWords: ["يُشْعِلُ", "زَيْدٌ", "نَارًا"], distractors: ["أَشْعَلَ", "نَارٌ"] },
+            { level: 4, category: "L4: Objek Nakirah", indonesian: "Ibu sedang mengeluarkan makanan", correctWords: ["تُخْرِجُ", "الْأُمُّ", "طَعَامًا"], distractors: ["أَخْرَجَتْ", "طَعَامٌ"] },
+
+            // -- Kalimat Kompleks Lainnya (SPOK / Keterangan) --
+            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Saya sedang sholat di masjid berjamaah", correctWords: ["أُصَلِّي", "فِي", "الْمَسْجِدِ", "جَمَاعَةً"], distractors: ["صَلَّيْتُ", "مُصَلَّى"] }, 
+            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Zaid telah memukul anjing dengan batu", correctWords: ["ضَرَبَ", "زَيْدٌ", "الْكَلْبَ", "بِالْحَجَرِ"], distractors: ["يَضْرِبُ", "حَجَرًا"] },
+            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Fatimah sedang menutup pintu rumah", correctWords: ["تُغْلِقُ", "فَاطِمَةُ", "بَابَ", "الْبَيْتِ"], distractors: ["أَغْلَقَتْ", "بَابًا"] },
+            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Ayah sedang pulang dari kantor", correctWords: ["يَرْجِعُ", "الْأَبُ", "مِنَ", "الْمَكْتَبِ"], distractors: ["رَجَعَ", "إِلَى"] },
+            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Petani telah pergi ke sawah pagi hari", correctWords: ["ذَهَبَ", "الْفَلَّاحُ", "إِلَى", "الْمَزْرَعَةِ", "صَبَاحًا"], distractors: ["يَذْهَبُ", "مَسَاءً"] },
+            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Para siswa sedang membaca Al-Qur'an di kelas", correctWords: ["يَقْرَأُ", "الطُّلَّابُ", "الْقُرْآنَ", "فِي", "الْفَصْلِ"], distractors: ["قَرَأَ", "الْقُرْآنُ"] },
+            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Siswa (lk) sedang duduk di atas kursi", correctWords: ["يَجْلِسُ", "الطَّالِبُ", "عَلَى", "الْكُرْسِيِّ"], distractors: ["جَلَسَ", "فِي"] },
+            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Singa itu sedang tidur di hutan", correctWords: ["يَنَامُ", "الْأَسَدُ", "فِي", "الْغَابَةِ"], distractors: ["نَامَ", "أَسَدٌ"] },
+            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Ibu sedang mencuci piring kotor", correctWords: ["تَغْسِلُ", "الْأُمُّ", "الصَّحْنَ", "الْوَسِخَ"], distractors: ["صَحْنًا", "وَسِخًا"] },
+            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Guru (lk) sedang berdiri di depan kelas", correctWords: ["يَقُومُ", "الْمُدَرِّسُ", "أَمَامَ", "الْفَصْلِ"], distractors: ["قَامَ", "وَرَاءَ"] },
+            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Hujan sedang turun dari langit", correctWords: ["يَنْزِلُ", "الْمَطَرُ", "مِنَ", "السَّمَاءِ"], distractors: ["نَزَلَ", "سَمَاءٍ"] },
+            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Allah sedang menghidupkan dan mematikan", correctWords: ["يُحْيِي", "اللهُ", "وَ", "يُمِيتُ"], distractors: ["أَحْيَا", "أَمَاتَ"] },
+            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Zaid sedang menginginkan air", correctWords: ["يُرِيدُ", "زَيْدٌ", "الْمَاءَ"], distractors: ["أَرَادَ", "مَاءً"] },
+            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Siswa telah meminjam buku dari perpustakaan", correctWords: ["اِسْتَعَارَ", "الطَّالِبُ", "الْكِتَابَ", "مِنَ", "الْمَكْتَبَةِ"], distractors: ["يَسْتَعِيرُ", "كِتَابًا"] },
+            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Saya sedang membantu ibu di dapur", correctWords: ["أُسَاعِدُ", "الْأُمَّ", "فِي", "الْمَطْبَخِ"], distractors: ["سَاعَدْتُ", "أُمًّا"] },
+            
+            // -- Legend / Hikmah / Hadits --
+            { level: 4, category: "L4: Kalimat Hikmah", indonesian: "Sholat itu tiang agama", correctWords: ["الصَّلَاةُ", "عِمَادُ", "الدِّينِ"], distractors: ["صَلَاةٌ", "دِينًا"] },
+            { level: 4, category: "L4: Kalimat Hikmah", indonesian: "Surga itu di bawah telapak kaki ibu", correctWords: ["الْجَنَّةُ", "تَحْتَ", "أَقْدَامِ", "الْأُمَّهَاتِ"], distractors: ["جَنَّةٌ", "فَوْقَ"] },
+            { level: 4, category: "L4: Kalimat Hikmah", indonesian: "Menuntut ilmu itu wajib bagi setiap muslim", correctWords: ["طَلَبُ", "الْعِلْمِ", "فَرِيضَةٌ", "عَلَى", "كُلِّ", "مُسْلِمٍ"], distractors: ["طَالِبُ", "عِلْمًا"] },
+            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Allah telah menciptakan langit", correctWords: ["خَلَقَ", "اللهُ", "السَّمَاءَ"], distractors: ["يَخْلُقُ", "سَمَاءً"] },
+            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Orang mukmin masuk surga dengan rahmat Allah", correctWords: ["يَدْخُلُ", "الْمُؤْمِنُ", "الْجَنَّةَ", "بِرَحْمَةِ", "اللهِ"], distractors: ["دَخَلَ", "جَنَّةً"] },
+            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Amal itu tergantung niat", correctWords: ["الْأَعْمَالُ", "بِالنِّيَّاتِ"], distractors: ["عَمَلٌ", "نِيَّةٌ"] },
+            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Orang muslim itu saudara orang muslim", correctWords: ["الْمُسْلِمُ", "أَخُو", "الْمُسْلِمِ"], distractors: ["مُسْلِمٌ", "أَخَا"] }
+        ];
+
+        // --- UTILS & STORAGE ---
+        const LEADERBOARD_KEY = 'tarkib_legend_leaderboard_v1';
+        
+        const getLeaderboard = () => {
+            const stored = localStorage.getItem(LEADERBOARD_KEY);
+            return stored ? JSON.parse(stored) : [];
+        };
+
+        const saveScoreToLeaderboard = (name, score, level) => {
+            const current = getLeaderboard();
+            const newEntry = { name, score, level, date: new Date().toLocaleDateString() };
+            const updated = [...current, newEntry].sort((a, b) => b.score - a.score).slice(0, 50); 
+            localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(updated));
+        };
+
+        const downloadCSV = () => {
+            const scores = getLeaderboard();
+            if (scores.length === 0) { alert("Belum ada data."); return; }
+            let csvContent = "data:text/csv;charset=utf-8,No,Nama,Level,Skor,Tanggal\n"; 
+            scores.forEach((row, i) => csvContent += `${i + 1},"${row.name}",${row.level},${row.score},${row.date}\n`);
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "tarkib_legend_scores.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        const shuffleArray = (array) => {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        };
+
+        // --- COMPONENTS ---
+
+        const Leaderboard = ({ onClose }) => {
+            const scores = getLeaderboard();
+            return (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in" onPointerDown={(e) => e.stopPropagation()}>
+                    <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl pop-in relative overflow-hidden flex flex-col max-h-[80vh]">
+                        <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-yellow-100 to-white -z-10"></div>
+                        <h2 className="text-3xl font-bold text-center text-yellow-600 mb-2 flex items-center justify-center gap-2"><span>🏆</span> Papan Skor</h2>
+                        <div className="flex-grow overflow-y-auto scrollbar-hide mb-4 border rounded-xl bg-gray-50">
+                            <table className="w-full text-left border-collapse">
+                                <thead className="bg-gray-100 text-gray-600 text-sm uppercase sticky top-0 shadow-sm">
+                                    <tr><th className="p-3">#</th><th className="p-3">Nama</th><th className="p-3">Lvl</th><th className="p-3 text-right">Skor</th></tr>
+                                </thead>
+                                <tbody>
+                                    {scores.length === 0 ? (<tr><td colSpan="4" className="p-6 text-center text-gray-400 italic">Belum ada data</td></tr>) : (
+                                        scores.map((entry, idx) => (
+                                            <tr key={idx} className={`border-b last:border-0 ${idx < 3 ? 'bg-yellow-50/50' : ''}`}>
+                                                <td className="p-3 font-bold text-gray-500">{idx+1}</td>
+                                                <td className="p-3 font-bold text-gray-800">{entry.name}</td>
+                                                <td className="p-3 text-sm text-gray-500">{entry.level}</td>
+                                                <td className="p-3 text-right font-mono font-bold text-emerald-600">{entry.score}</td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <button onPointerDown={(e) => { e.preventDefault(); downloadCSV(); }} className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition">📥 Download Laporan (Excel)</button>
+                            <button onPointerDown={(e) => { e.preventDefault(); onClose(); }} className="w-full bg-gray-800 text-white font-bold py-3 rounded-xl hover:bg-black transition">Tutup</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const NameInput = ({ mode, onNext, onCancel }) => {
+            const [p1Name, setP1Name] = React.useState("");
+            const [p2Name, setP2Name] = React.useState("");
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                if (mode === 'single' && p1Name.trim()) onNext(p1Name, null);
+                else if (mode === 'duel' && p1Name.trim() && p2Name.trim()) onNext(p1Name, p2Name);
+            };
+            return (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fade-in" onPointerDown={(e) => e.stopPropagation()}>
+                    <div className="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl pop-in">
+                        <h2 className="text-2xl font-bold text-emerald-800 mb-2 text-center">Siapa yang main?</h2>
+                        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+                            <div><label className="block text-sm font-bold text-gray-700 mb-1">Nama Player 1 {mode === 'duel' && '(Kiri)'}</label><input type="text" value={p1Name} onChange={(e) => setP1Name(e.target.value)} className="w-full border-2 border-gray-200 rounded-xl p-3 focus:border-emerald-500 focus:outline-none" placeholder="Tulis nama..." maxLength="12" autoFocus /></div>
+                            {mode === 'duel' && (<div><label className="block text-sm font-bold text-gray-700 mb-1">Nama Player 2 (Kanan)</label><input type="text" value={p2Name} onChange={(e) => setP2Name(e.target.value)} className="w-full border-2 border-gray-200 rounded-xl p-3 focus:border-orange-500 focus:outline-none" placeholder="Tulis nama..." maxLength="12" /></div>)}
+                            <div className="pt-4 flex gap-3"><button type="button" onPointerDown={(e) => {e.preventDefault(); onCancel();}} className="flex-1 bg-gray-100 text-gray-600 font-bold py-3 rounded-xl hover:bg-gray-200">Batal</button><button type="submit" onPointerDown={(e) => {if((!p1Name || (mode === 'duel' && !p2Name))) return; e.preventDefault(); handleSubmit(e);}} disabled={!p1Name || (mode === 'duel' && !p2Name)} className="flex-1 bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-700 disabled:opacity-50">Lanjut Pilih Level</button></div>
+                        </form>
+                    </div>
+                </div>
+            );
+        };
+
+        const LevelSelect = ({ onSelectLevel, onBack }) => {
+            const levels = [
+                { id: 1, title: "Level 1", subtitle: "Frasa Dasar", desc: "Jar Majrur, Idhafah, Sifat" },
+                { id: 2, title: "Level 2", subtitle: "Jumlah Ismiyah", desc: "Mubtada & Khobar" },
+                { id: 3, title: "Level 3", subtitle: "Jumlah Fi'liyah", desc: "Fi'il Madhi & Mudhari" },
+                { id: 4, title: "Level 4", subtitle: "Mahir", desc: "Kalimat Kompleks & SPOK" }
+            ];
+            return (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fade-in" onPointerDown={(e) => e.stopPropagation()}>
+                    <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl pop-in">
+                        <div className="flex justify-between items-center mb-4"><h2 className="text-2xl font-bold text-emerald-800">Pilih Tingkatan</h2><button onPointerDown={(e) => {e.preventDefault(); onBack();}} className="text-gray-400 hover:text-red-500 font-bold w-10 h-10 flex items-center justify-center">✕</button></div>
+                        <div className="grid grid-cols-1 gap-3">
+                            {levels.map((lvl) => (
+                                <button key={lvl.id} onPointerDown={(e) => { e.preventDefault(); onSelectLevel(lvl.id); }} className="flex items-center p-4 rounded-xl border-2 border-emerald-100 hover:border-emerald-500 hover:bg-emerald-50 transition group text-left w-full">
+                                    <div className="bg-emerald-100 text-emerald-600 font-bold w-12 h-12 rounded-full flex items-center justify-center text-xl group-hover:bg-emerald-500 group-hover:text-white transition">{lvl.id}</div>
+                                    <div className="ml-4"><h3 className="font-bold text-gray-800 text-lg">{lvl.title}: {lvl.subtitle}</h3><p className="text-sm text-gray-500">{lvl.desc}</p></div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const MainMenu = ({ onModeSelect, onShowRules, onShowLeaderboard }) => (
+            <div className="min-h-screen flex flex-col items-center justify-center p-6 relative overflow-hidden bg-emerald-50">
+                <div className="absolute inset-0 bg-pattern"></div>
+                <div className="z-10 w-full max-w-md bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-2xl border-4 border-emerald-100 text-center pop-in">
+                    <div className="mb-6 flex justify-center">
+                        <img src="logo.png" alt="Logo Sekolah" className="h-28 w-auto object-contain" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                        <div style={{display: 'none'}} className="text-6xl">🕌</div>
+                    </div>
+                    <h1 className="text-4xl font-extrabold text-emerald-800 mb-2 font-serif tracking-wide">TARKIB LEGEND</h1>
+                    <p className="text-emerald-600 font-semibold mb-8">Game Edukasi Bahasa Arab</p>
+                    <div className="space-y-3">
+                        <button onPointerDown={(e) => {e.preventDefault(); onModeSelect('single');}} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xl font-bold py-4 rounded-2xl shadow-lg transition transform hover:scale-105 flex items-center justify-center gap-3"><span>👤</span> 1 Pemain</button>
+                        <button onPointerDown={(e) => {e.preventDefault(); onModeSelect('duel');}} className="w-full bg-orange-500 hover:bg-orange-600 text-white text-xl font-bold py-4 rounded-2xl shadow-lg transition transform hover:scale-105 flex items-center justify-center gap-3"><span>⚔️</span> Duel 2 Pemain</button>
+                        <div className="flex gap-3">
+                            <button onPointerDown={(e) => {e.preventDefault(); onShowLeaderboard();}} className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-3 rounded-2xl shadow-md transition transform hover:scale-105 flex items-center justify-center gap-2">🏆 Papan Skor</button>
+                            <button onPointerDown={(e) => {e.preventDefault(); onShowRules();}} className="flex-1 bg-white hover:bg-gray-50 text-emerald-700 font-bold py-3 rounded-2xl border-2 border-emerald-200 shadow-sm transition">📜 Aturan</button>
+                        </div>
+                    </div>
+                </div>
+                <div className="mt-8 z-10 text-center"><p className="text-xs text-emerald-800 font-bold uppercase tracking-widest mb-1">Pengembang</p><div className="bg-white px-6 py-2 rounded-full shadow-sm border border-emerald-100"><p className="text-emerald-700 font-bold text-sm">SDIT Qurratu A'yun Al-Islami Maros</p></div></div>
+            </div>
+        );
+
+        const GameBoard = ({ isDuel = false, playerName = "Player", playerIndex = 1, questionData, questionIndex, onCorrect, onWrong, score }) => {
+            const [availableWords, setAvailableWords] = React.useState([]);
+            const [selectedWords, setSelectedWords] = React.useState([]);
+            const [localState, setLocalState] = React.useState('playing');
+            const [shake, setShake] = React.useState(false);
+            const [timeLeft, setTimeLeft] = React.useState(60);
+
+            const calculateInitialTime = (idx) => (idx === 0 ? 60 : idx === 1 ? 50 : 40);
+
+            React.useEffect(() => {
+                if(questionData) {
+                    const allWords = [
+                        ...questionData.correctWords.map((w, i) => ({ id: `c-${i}`, text: w })),
+                        ...questionData.distractors.map((w, i) => ({ id: `d-${i}`, text: w }))
+                    ];
+                    setAvailableWords(shuffleArray(allWords));
+                    setSelectedWords([]);
+                    setLocalState('playing');
+                    setTimeLeft(calculateInitialTime(questionIndex)); 
+                }
+            }, [questionData, questionIndex]);
+
+            React.useEffect(() => {
+                let timer;
+                if (localState === 'playing' && timeLeft > 0) {
+                    timer = setInterval(() => { setTimeLeft((prev) => prev - 1); }, 1000);
+                } else if (timeLeft === 0 && localState === 'playing') {
+                    handleWrongLogic();
+                }
+                return () => clearInterval(timer);
+            }, [timeLeft, localState]);
+
+            const handleWrongLogic = () => {
+                playWrongSound();
+                setLocalState('wrong');
+                setShake(true);
+                setTimeout(() => setShake(false), 500);
+                onWrong(); 
+            };
+
+            const handleWordClick = (e, word) => {
+                e.preventDefault(); 
+                if(localState === 'correct') return;
+                setAvailableWords(prev => prev.filter(w => w.id !== word.id));
+                setSelectedWords(prev => [...prev, word]); 
+            };
+
+            const handleSelectedClick = (e, word) => {
+                e.preventDefault(); 
+                if(localState === 'correct') return;
+                setSelectedWords(prev => prev.filter(w => w.id !== word.id));
+                setAvailableWords(prev => [...prev, word]);
+                setLocalState('playing');
+            };
+
+            const checkAnswer = (e) => {
+                e.preventDefault(); 
+                if(localState === 'correct') return;
+                const isLengthMatch = selectedWords.length === questionData.correctWords.length;
+                const isContentMatch = selectedWords.every((w, i) => w.text === questionData.correctWords[i]);
+
+                if (isLengthMatch && isContentMatch) {
+                    playCorrectSound();
+                    setLocalState('correct');
+                    onCorrect();
+                } else {
+                    handleWrongLogic();
+                }
+            };
+
+            const borderColor = playerIndex === 2 ? 'border-orange-500' : 'border-emerald-500';
+            const dynamicAnswerFont = selectedWords.length > 4 ? 'text-2xl md:text-3xl' : 'text-3xl md:text-5xl';
+
+            return (
+                <div className={`flex flex-col h-full bg-white border-b-8 ${isDuel ? borderColor : 'border-emerald-500'} relative`}>
+                    <div className="bg-gray-100 p-2 flex justify-between items-center px-4 border-b border-gray-200 select-none">
+                        <div className="flex flex-col max-w-[30%]"><span className={`text-xs font-bold uppercase truncate ${playerIndex === 2 ? 'text-orange-600' : 'text-emerald-600'}`}>{playerName}</span><span className="text-xs text-gray-400">Level {questionData.level} - Soal {questionIndex + 1}</span></div>
+                        <div className={`flex items-center gap-1 font-bold ${timeLeft <= 10 ? 'text-red-600 pulse-red' : 'text-gray-700'}`}><span>⏱️ {timeLeft}</span></div>
+                        <div className="bg-white px-2 py-1 rounded border border-gray-200"><span className="text-lg font-bold text-gray-800">⭐ {score}</span></div>
+                    </div>
+                    <div className="bg-emerald-50 p-4 text-center flex-grow flex items-center justify-center flex-col min-h-[100px] select-none">
+                        <p className="text-gray-400 text-xs uppercase mb-1">{questionData.category}</p>
+                        <h3 className="text-2xl md:text-3xl font-bold text-gray-800 leading-snug">"{questionData.indonesian}"</h3>
+                    </div>
+                    <div dir="rtl" className={`p-3 min-h-[120px] bg-white border-y border-gray-100 flex flex-wrap gap-2 justify-center items-center content-center transition-colors ${localState === 'wrong' ? 'bg-red-50' : ''}`}>
+                        {selectedWords.length === 0 && <span className="text-sm text-gray-300 italic dir-ltr select-none">Susun kata di sini</span>}
+                        {selectedWords.map(w => (
+                            <button key={w.id} onPointerDown={(e) => handleSelectedClick(e, w)} className={`arabic-text ${dynamicAnswerFont} px-3 py-2 bg-white border-2 border-emerald-300 rounded-xl shadow-md hover:bg-red-50 hover:border-red-300 transition-all ${shake ? 'text-red-500 border-red-500' : 'text-gray-800'}`}>
+                                {w.text}
+                            </button>
+                        ))}
+                    </div>
+                    <div className="p-4 bg-gray-50 flex flex-wrap gap-3 justify-center min-h-[120px] content-start overflow-y-auto">
+                        {availableWords.map(w => (
+                            <button key={w.id} onPointerDown={(e) => handleWordClick(e, w)} className="arabic-text text-2xl px-4 py-2 bg-white border border-gray-200 rounded-xl shadow-sm hover:bg-emerald-100 hover:border-emerald-300 hover:-translate-y-1 transition-all duration-200 text-emerald-800">
+                                {w.text}
+                            </button>
+                        ))}
+                    </div>
+                    <div className="p-3">
+                        {localState === 'correct' ? (
+                            <div className="w-full bg-emerald-500 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 animate-pulse text-xl select-none"><span>✨ Mumtaz!</span></div>
+                        ) : (
+                            <button onPointerDown={checkAnswer} disabled={selectedWords.length === 0} className={`w-full font-bold py-4 rounded-xl shadow-md transition text-lg ${selectedWords.length === 0 ? 'bg-gray-200 text-gray-400' : 'bg-emerald-600 text-white active:scale-95 hover:bg-emerald-700'}`}>Cek Jawaban</button>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [view, setView] = React.useState('menu'); 
+            const [tempMode, setTempMode] = React.useState('single');
+            const [selectedLevel, setSelectedLevel] = React.useState(null);
+            
+            const [sessionQuestions, setSessionQuestions] = React.useState([]);
+            const [questionIdx, setQuestionIdx] = React.useState(0);
+
+            const [p1Name, setP1Name] = React.useState("");
+            const [p2Name, setP2Name] = React.useState("");
+
+            const [spScore, setSpScore] = React.useState(0);
+            const [spLives, setSpLives] = React.useState(3);
+            const [spFinished, setSpFinished] = React.useState(false);
+
+            const [p1Score, setP1Score] = React.useState(0);
+            const [p2Score, setP2Score] = React.useState(0);
+            const [duelRoundKey, setDuelRoundKey] = React.useState(0);
+
+            const goHome = () => { setView('menu'); setSpFinished(false); }
+            const goLevelSelect = () => { setSpFinished(false); setView('levelSelect'); }
+
+            const handleModeSelect = (mode) => { setTempMode(mode); setView('inputName'); };
+            const handleNameSubmit = (name1, name2) => { setP1Name(name1); if(name2) setP2Name(name2); setView('levelSelect'); };
+
+            const handleLevelSelect = (levelId) => {
+                setSelectedLevel(levelId);
+                const filtered = gameDataDatabase.filter(q => q.level === levelId);
+                const shuffled = shuffleArray(filtered);
+                // LIMIT SESSION TO 20 QUESTIONS MAX to ensure variety across plays
+                const sessionSet = shuffled.slice(0, 20); 
+                setSessionQuestions(sessionSet);
+                setQuestionIdx(0);
+                if (tempMode === 'single') { setSpScore(0); setSpLives(3); setSpFinished(false); setView('single'); } 
+                else { setP1Score(0); setP2Score(0); setDuelRoundKey(0); setView('duel'); }
+            };
+
+            const handleSpCorrect = () => {
+                setSpScore(s => s + 100);
+                setTimeout(() => {
+                    if (questionIdx + 1 < sessionQuestions.length) {
+                        setQuestionIdx(p => p + 1);
+                    } else {
+                        setSpFinished(true);
+                        saveScoreToLeaderboard(p1Name, spScore + 100, selectedLevel);
+                        if(selectedLevel === 4) { playGrandFanfare(); fireConfetti(2); } else { playLevelCompleteSound(); fireConfetti(1); }
+                    }
+                }, 1500);
+            };
+
+            const handleSpWrong = () => {
+                setSpLives(l => l - 1);
+                if (spLives <= 1) {
+                    setSpFinished(true);
+                    playWrongSound();
+                    saveScoreToLeaderboard(p1Name, spScore, selectedLevel);
+                }
+            };
+
+            const handleDuelWin = (winner) => {
+                if (document.duelLocked) return;
+                document.duelLocked = true;
+                if (winner === 1) setP1Score(s => s + 1); else setP2Score(s => s + 1);
+                setTimeout(() => {
+                    if (questionIdx + 1 < sessionQuestions.length) {
+                        setQuestionIdx(p => p + 1);
+                        setDuelRoundKey(k => k + 1);
+                        document.duelLocked = false;
+                    } else {
+                        setSpFinished(true);
+                        if(selectedLevel === 4) { playGrandFanfare(); fireConfetti(2); } else { playLevelCompleteSound(); fireConfetti(1); }
+                    }
+                }, 1500);
+            };
+
+            if (view === 'menu') return <MainMenu onModeSelect={handleModeSelect} onShowRules={() => setView('rules')} onShowLeaderboard={() => setView('leaderboard')} />;
+            if (view === 'rules') return <RulesModal onClose={goHome} />;
+            if (view === 'leaderboard') return <Leaderboard onClose={goHome} />;
+            if (view === 'inputName') return <NameInput mode={tempMode} onNext={handleNameSubmit} onCancel={goHome} />;
+            if (view === 'levelSelect') return <LevelSelect onSelectLevel={handleLevelSelect} onBack={() => setView('inputName')} />;
+
+            if (spFinished) {
+                return (
+                    <div className="min-h-screen flex items-center justify-center bg-emerald-50 p-6">
+                        <div className="bg-white p-8 rounded-3xl shadow-2xl text-center max-w-sm w-full pop-in">
+                            <h2 className="text-3xl font-bold text-emerald-800 mb-4">Permainan Selesai!</h2>
+                            <p className="text-sm text-gray-500 mb-6">Level {selectedLevel}</p>
+                            {view === 'duel' ? (
+                                <div className="space-y-4 mb-8">
+                                    <div className="flex gap-4 justify-center">
+                                        <div className={`p-4 rounded-xl w-1/2 ${p1Score > p2Score ? 'bg-emerald-100 border-2 border-emerald-500' : 'bg-gray-100'}`}>
+                                            <p className="font-bold text-gray-600 truncate">{p1Name}</p>
+                                            <p className="text-4xl font-bold text-emerald-600">{p1Score}</p>
+                                        </div>
+                                        <div className={`p-4 rounded-xl w-1/2 ${p2Score > p1Score ? 'bg-orange-100 border-2 border-orange-500' : 'bg-gray-100'}`}>
+                                            <p className="font-bold text-gray-600 truncate">{p2Name}</p>
+                                            <p className="text-4xl font-bold text-orange-600">{p2Score}</p>
+                                        </div>
+                                    </div>
+                                    <p className="text-xl font-bold mt-4">{p1Score === p2Score ? "Seri!" : (p1Score > p2Score ? `${p1Name} Menang!` : `${p2Name} Menang!`)}</p>
+                                </div>
+                            ) : (
+                                <div className="mb-8">
+                                    <p className="text-gray-500 font-bold mb-1">{p1Name}</p>
+                                    <p className="text-sm text-gray-400 uppercase">Skor Akhir</p>
+                                    <p className="text-6xl font-bold text-emerald-600 mb-2">{spScore}</p>
+                                    <p className="text-sm text-yellow-600 bg-yellow-100 py-1 px-3 rounded-full inline-block">{spLives > 0 ? "🏆 Tamat Sempurna" : "Disimpan di Papan Skor"}</p>
+                                </div>
+                            )}
+                            <div className="flex flex-col gap-3">
+                                <button onPointerDown={(e) => {e.preventDefault(); goLevelSelect();}} className="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-700 transition">📚 Pilih Level Lain</button>
+                                <button onPointerDown={(e) => {e.preventDefault(); setView('leaderboard');}} className="w-full bg-yellow-500 text-white font-bold py-3 rounded-xl hover:bg-yellow-600 transition">🏆 Lihat Papan Skor</button>
+                                <button onPointerDown={(e) => {e.preventDefault(); goHome();}} className="w-full bg-gray-800 text-white font-bold py-3 rounded-xl hover:bg-black transition">🏠 Kembali ke Menu</button>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            const currentQ = sessionQuestions[questionIdx];
+            if (!currentQ) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+
+            if (view === 'duel') {
+                return (
+                    <div className="h-screen w-screen flex overflow-hidden bg-gray-900" onPointerDown={(e) => e.stopPropagation()}>
+                        <div className="w-1/2 h-full relative border-r-4 border-gray-700">
+                            <GameBoard key={`p1-${duelRoundKey}`} isDuel={true} playerName={p1Name} playerIndex={1} questionData={currentQ} questionIndex={questionIdx} onCorrect={() => handleDuelWin(1)} onWrong={() => {}} score={p1Score} />
+                        </div>
+                        <div className="w-1/2 h-full relative">
+                            <GameBoard key={`p2-${duelRoundKey}`} isDuel={true} playerName={p2Name} playerIndex={2} questionData={currentQ} questionIndex={questionIdx} onCorrect={() => handleDuelWin(2)} onWrong={() => {}} score={p2Score} />
+                        </div>
+                        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-50">
+                            <button onPointerDown={(e) => {e.preventDefault(); goHome();}} className="bg-gray-800 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg border-2 border-white hover:bg-black" title="Menu Utama">🏠</button>
+                            <button onPointerDown={(e) => {e.preventDefault(); goLevelSelect();}} className="bg-emerald-600 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg border-2 border-white hover:bg-emerald-700" title="Pilih Level">📚</button>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="min-h-screen bg-emerald-50 flex flex-col max-w-md mx-auto shadow-2xl overflow-hidden relative" onPointerDown={(e) => e.stopPropagation()}>
+                    <div className="bg-white p-4 flex justify-between items-center shadow-sm z-10">
+                        <div className="flex gap-2">
+                            <button onPointerDown={(e) => {e.preventDefault(); goHome();}} className="text-gray-400 hover:text-emerald-600 font-bold px-2 py-1 rounded hover:bg-emerald-50 border border-transparent hover:border-emerald-200 transition" title="Menu Utama">🏠</button>
+                            <button onPointerDown={(e) => {e.preventDefault(); goLevelSelect();}} className="text-gray-400 hover:text-emerald-600 font-bold px-2 py-1 rounded hover:bg-emerald-50 border border-transparent hover:border-emerald-200 transition" title="Pilih Level">📚 Level</button>
+                        </div>
+                        <div className="flex gap-1">{[1,2,3].map(i => <span key={i} className={i <= spLives ? "text-red-500" : "text-gray-200"}>❤️</span>)}</div>
+                    </div>
+                    <div className="w-full bg-gray-200 h-2">
+                        <div className="bg-emerald-500 h-2 transition-all" style={{width: `${((questionIdx)/sessionQuestions.length)*100}%`}}></div>
+                    </div>
+                    <div className="flex-grow relative bg-white">
+                        <GameBoard key={`sp-${questionIdx}`} playerName={p1Name} playerIndex={1} questionData={currentQ} questionIndex={questionIdx} onCorrect={handleSpCorrect} onWrong={handleSpWrong} score={spScore} />
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
