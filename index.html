@@ -108,53 +108,55 @@
             }
         };
 
-        // --- DATA SOAL KOMPREHENSIF (DOMINASI KOSAKATA SEKOLAH) ---
+        // --- DATA SOAL KOMPREHENSIF ---
         const gameDataDatabase = [
-            // =================================================================
-            // LEVEL 1: FRASA (Kata Benda, Sifat, Tempat, Idhafah)
-            // =================================================================
-            
-            // -- Jar Majrur & Zharaf (Tempat di Sekolah/Rumah) --
-            { level: 1, category: "L1: Jar Majrur", indonesian: "Di dalam kelas", correctWords: ["فِي", "الْفَصْلِ"], distractors: ["عَلَى", "فَصْلٌ"] },
-            { level: 1, category: "L1: Jar Majrur", indonesian: "Di atas meja", correctWords: ["عَلَى", "الْمَكْتَبِ"], distractors: ["فِي", "مَكْتَبٌ"] },
-            { level: 1, category: "L1: Jar Majrur", indonesian: "Di dalam tas", correctWords: ["فِي", "الْحَقِيبَةِ"], distractors: ["عَلَى", "حَقِيبَةٌ"] },
-            { level: 1, category: "L1: Jar Majrur", indonesian: "Di atas kursi", correctWords: ["عَلَى", "الْكُرْسِيِّ"], distractors: ["تَحْتَ", "كُرْسِيٌّ"] },
-            { level: 1, category: "L1: Jar Majrur", indonesian: "Di dalam lemari", correctWords: ["فِي", "الْخِزَانَةِ"], distractors: ["عَلَى", "خِزَانَةٌ"] },
-            { level: 1, category: "L1: Jar Majrur", indonesian: "Dari rumah", correctWords: ["مِنَ", "الْبَيْتِ"], distractors: ["إِلَى", "بَيْتٌ"] },
-            { level: 1, category: "L1: Jar Majrur", indonesian: "Ke sekolah", correctWords: ["إِلَى", "الْمَدْرَسَةِ"], distractors: ["مِنَ", "مَدْرَسَةٌ"] },
-            { level: 1, category: "L1: Jar Majrur", indonesian: "Di atas ranjang", correctWords: ["عَلَى", "السَّرِيرِ"], distractors: ["فِي", "سَرِيرٌ"] },
-            
-            { level: 1, category: "L1: Zharaf", indonesian: "Di depan sekolah", correctWords: ["أَمَامَ", "الْمَدْرَسَةِ"], distractors: ["وَرَاءَ", "مَدْرَسَةٌ"] },
-            { level: 1, category: "L1: Zharaf", indonesian: "Di belakang dapur", correctWords: ["وَرَاءَ", "الْمَطْبَخِ"], distractors: ["أَمَامَ", "مَطْبَخٌ"] },
-            { level: 1, category: "L1: Zharaf", indonesian: "Di samping toko", correctWords: ["جَانِبَ", "الدُّكَّانِ"], distractors: ["أَمَامَ", "دُكَّانٌ"] },
-            { level: 1, category: "L1: Zharaf", indonesian: "Di bawah meja", correctWords: ["تَحْتَ", "الْمَكْتَبِ"], distractors: ["فَوْقَ", "مَكْتَبٌ"] },
+            // === LEVEL 1A: FRASA JAR MAJRUR & ZHARAF ===
+            { level: 1.1, category: "L1A: Jar Majrur (Min)", indonesian: "Dari rumah", correctWords: ["مِنَ", "الْبَيْتِ"], distractors: ["إِلَى", "بَيْتٌ"] },
+            { level: 1.1, category: "L1A: Jar Majrur (Ila)", indonesian: "Ke sekolah", correctWords: ["إِلَى", "الْمَدْرَسَةِ"], distractors: ["مِنَ", "مَدْرَسَةٌ"] },
+            { level: 1.1, category: "L1A: Jar Majrur (Fi)", indonesian: "Di dalam kelas", correctWords: ["فِي", "الْفَصْلِ"], distractors: ["عَلَى", "فَصْلٌ"] },
+            { level: 1.1, category: "L1A: Jar Majrur ('Ala)", indonesian: "Di atas meja", correctWords: ["عَلَى", "الْمَكْتَبِ"], distractors: ["فِي", "مَكْتَبٌ"] },
+            { level: 1.1, category: "L1A: Jar Majrur ('An)", indonesian: "Tentang berita itu", correctWords: ["عَنِ", "النَّبَإِ"], distractors: ["فِي", "نَبَأٍ"] },
+            { level: 1.1, category: "L1A: Jar Majrur (Fi)", indonesian: "Di dalam tas", correctWords: ["فِي", "الْحَقِيبَةِ"], distractors: ["عَلَى", "حَقِيبَةٌ"] },
+            { level: 1.1, category: "L1A: Jar Majrur ('Ala)", indonesian: "Di atas kursi", correctWords: ["عَلَى", "الْكُرْسِيِّ"], distractors: ["تَحْتَ", "كُرْسِيٌّ"] },
+            { level: 1.1, category: "L1A: Jar Majrur (Fi)", indonesian: "Di dalam lemari", correctWords: ["فِي", "الْخِزَانَةِ"], distractors: ["عَلَى", "خِزَانَةٌ"] },
+            { level: 1.1, category: "L1A: Jar Majrur (Ila)", indonesian: "Ke masjid", correctWords: ["إِلَى", "الْمَسْجِدِ"], distractors: ["مِنَ", "مَسْجِدٌ"] },
+            { level: 1.1, category: "L1A: Jar Majrur ('Ala)", indonesian: "Di atas ranjang", correctWords: ["عَلَى", "السَّرِيرِ"], distractors: ["فِي", "سَرِيرٌ"] },
+            { level: 1.1, category: "L1A: Jar Majrur (Bi)", indonesian: "Dengan pena", correctWords: ["بِالْقَلَمِ"], distractors: ["بِ", "قَلَمٌ"] },
+            { level: 1.1, category: "L1A: Jar Majrur (Li)", indonesian: "Milik Allah", correctWords: ["لِلَّهِ"], distractors: ["لِ", "اللهِ"] },
+            { level: 1.1, category: "L1A: Jar Majrur (Ka)", indonesian: "Seperti bulan", correctWords: ["كَالْقَمَرِ"], distractors: ["كَ", "قَمَرٌ"] },
+            { level: 1.1, category: "L1A: Jar Majrur (Li)", indonesian: "Untuk guru (lk)", correctWords: ["لِلْمُدَرِّسِ"], distractors: ["لِ", "مُدَرِّسٌ"] },
+            { level: 1.1, category: "L1A: Zharaf", indonesian: "Di depan sekolah", correctWords: ["أَمَامَ", "الْمَدْرَسَةِ"], distractors: ["وَرَاءَ", "مَدْرَسَةٌ"] },
+            { level: 1.1, category: "L1A: Zharaf", indonesian: "Di belakang dapur", correctWords: ["وَرَاءَ", "الْمَطْبَخِ"], distractors: ["أَمَامَ", "مَطْبَخٌ"] },
+            { level: 1.1, category: "L1A: Zharaf", indonesian: "Di samping toko", correctWords: ["جَانِبَ", "الدُّكَّانِ"], distractors: ["أَمَامَ", "دُكَّانٌ"] },
+            { level: 1.1, category: "L1A: Zharaf", indonesian: "Di bawah meja", correctWords: ["تَحْتَ", "الْمَكْتَبِ"], distractors: ["فَوْقَ", "مَكْتَبٌ"] },
 
-            // -- Idhafah (Kepemilikan) --
-            { level: 1, category: "L1: Idhafah", indonesian: "Pintu masjid", correctWords: ["بَابُ", "الْمَسْجِدِ"], distractors: ["الْبَابُ", "مَسْجِدًا"] },
-            { level: 1, category: "L1: Idhafah", indonesian: "Guru (lk) sekolah", correctWords: ["مُدَرِّسُ", "الْمَدْرَسَةِ"], distractors: ["مُدَرِّسٌ", "مَدْرَسَةً"] },
-            { level: 1, category: "L1: Idhafah", indonesian: "Kepala sekolah (pr)", correctWords: ["مُدِيرَةُ", "الْمَدْرَسَةِ"], distractors: ["مُدِيرَةٌ", "مَدْرَسَةٌ"] },
-            { level: 1, category: "L1: Idhafah", indonesian: "Kunci rumah", correctWords: ["مِفْتَاحُ", "الْبَيْتِ"], distractors: ["مِفْتَاحٌ", "بَيْتٌ"] },
-            { level: 1, category: "L1: Idhafah", indonesian: "Kitab Allah", correctWords: ["كِتَابُ", "اللهِ"], distractors: ["كِتَابٌ", "اللهَ"] },
-            { level: 1, category: "L1: Idhafah", indonesian: "Rasul Allah", correctWords: ["رَسُولُ", "اللهِ"], distractors: ["رَسُولٌ", "اللهَ"] },
+            // === LEVEL 1B: FRASA IDHAFAH ===
+            { level: 1.2, category: "L1B: Idhafah", indonesian: "Pintu masjid", correctWords: ["بَابُ", "الْمَسْجِدِ"], distractors: ["الْبَابُ", "مَسْجِدًا"] },
+            { level: 1.2, category: "L1B: Idhafah", indonesian: "Kitab Allah", correctWords: ["كِتَابُ", "اللهِ"], distractors: ["كِتَابٌ", "اللهَ"] },
+            { level: 1.2, category: "L1B: Idhafah", indonesian: "Utusan Allah", correctWords: ["رَسُولُ", "اللهِ"], distractors: ["رَسُولٌ", "اللهَ"] },
+            { level: 1.2, category: "L1B: Idhafah", indonesian: "Guru (lk) sekolah", correctWords: ["مُدَرِّسُ", "الْمَدْرَسَةِ"], distractors: ["مُدَرِّسٌ", "مَدْرَسَةً"] },
+            { level: 1.2, category: "L1B: Idhafah", indonesian: "Kepala sekolah (pr)", correctWords: ["مُدِيرَةُ", "الْمَدْرَسَةِ"], distractors: ["مُدِيرَةٌ", "مَدْرَسَةٌ"] },
+            { level: 1.2, category: "L1B: Idhafah", indonesian: "Kunci rumah", correctWords: ["مِفْتَاحُ", "الْبَيْتِ"], distractors: ["مِفْتَاحٌ", "بَيْتٌ"] },
+            { level: 1.2, category: "L1B: Idhafah", indonesian: "Rumah Allah (Ka'bah)", correctWords: ["بَيْتُ", "اللهِ"], distractors: ["بَيْتٌ", "اللهَ"] },
+            { level: 1.2, category: "L1B: Idhafah", indonesian: "Agama Islam", correctWords: ["دِينُ", "الْإِسْلَامِ"], distractors: ["دِينٌ", "إِسْلَامًا"] },
+            { level: 1.2, category: "L1B: Idhafah", indonesian: "Cahaya Iman", correctWords: ["نُورُ", "الْإِيمَانِ"], distractors: ["نُورٌ", "إِيمَانًا"] },
+            { level: 1.2, category: "L1B: Idhafah", indonesian: "Siksa Kubur", correctWords: ["عَذَابُ", "الْقَبْرِ"], distractors: ["عَذَابٌ", "قَبْرًا"] },
+            { level: 1.2, category: "L1B: Idhafah", indonesian: "Penduduk Surga", correctWords: ["أَهْلُ", "الْجَنَّةِ"], distractors: ["أَهْلٌ", "جَنَّةٌ"] },
+            { level: 1.2, category: "L1B: Idhafah", indonesian: "Hari Kiamat", correctWords: ["يَوْمُ", "الْقِيَامَةِ"], distractors: ["يَوْمٌ", "قِيَامَةٌ"] },
 
-            // -- Na'at Man'ut (Sifat - Nakirah & Ma'rifah) --
-            { level: 1, category: "L1: Sifat (Nakirah)", indonesian: "Sebuah tas baru", correctWords: ["حَقِيبَةٌ", "جَدِيدَةٌ"], distractors: ["الْحَقِيبَةُ", "الْجَدِيدَةُ"] },
-            { level: 1, category: "L1: Sifat (Nakirah)", indonesian: "Seorang murid yang rajin", correctWords: ["طَالِبٌ", "مُجْتَهِدٌ"], distractors: ["الطَّالِبُ", "الْمُجْتَهِدُ"] },
-            { level: 1, category: "L1: Sifat (Nakirah)", indonesian: "Sebuah pulpen lama", correctWords: ["قَلَمٌ", "قَدِيمٌ"], distractors: ["الْقَلَمُ", "جَدِيدٌ"] },
-            { level: 1, category: "L1: Sifat (Nakirah)", indonesian: "Seorang guru (pr) yang pandai", correctWords: ["مُدَرِّسَةٌ", "مَاهِرَةٌ"], distractors: ["مُدَرِّسٌ", "مَاهِرٌ"] },
-            { level: 1, category: "L1: Sifat (Nakirah)", indonesian: "Kemeja putih", correctWords: ["قَمِيصٌ", "أَبْيَضُ"], distractors: ["قَمِيصًا", "أَسْوَدُ"] },
-            
-            { level: 1, category: "L1: Sifat (Ma'rifah)", indonesian: "Peci yang hitam itu", correctWords: ["الْقَلَنْسُوَةُ", "السَّوْدَاءُ"], distractors: ["قَلَنْسُوَةٌ", "سَوْدَاءُ"] },
-            { level: 1, category: "L1: Sifat (Ma'rifah)", indonesian: "Kemeja yang bersih itu", correctWords: ["الْقَمِيصُ", "النَّظِيفُ"], distractors: ["قَمِيصٌ", "نَظِيفٌ"] },
-            { level: 1, category: "L1: Sifat (Ma'rifah)", indonesian: "Kelas yang luas itu", correctWords: ["الْفَصْلُ", "الْوَاسِعُ"], distractors: ["فَصْلٌ", "وَاسِعٌ"] },
-            { level: 1, category: "L1: Sifat (Ma'rifah)", indonesian: "Sekolah yang besar itu", correctWords: ["الْمَدْرَسَةُ", "الْكَبِيرَةُ"], distractors: ["مَدْرَسَةٌ", "كَبِيرَةٌ"] },
+            // === LEVEL 1C: FRASA NA'AT MAN'UT ===
+            { level: 1.3, category: "L1C: Sifat (Nakirah)", indonesian: "Sebuah tas baru", correctWords: ["حَقِيبَةٌ", "جَدِيدَةٌ"], distractors: ["الْحَقِيبَةُ", "الْجَدِيدَةُ"] },
+            { level: 1.3, category: "L1C: Sifat (Nakirah)", indonesian: "Seorang murid yang rajin", correctWords: ["طَالِبٌ", "مُجْتَهِدٌ"], distractors: ["الطَّالِبُ", "الْمُجْتَهِدُ"] },
+            { level: 1.3, category: "L1C: Sifat (Nakirah)", indonesian: "Sebuah pulpen lama", correctWords: ["قَلَمٌ", "قَدِيمٌ"], distractors: ["الْقَلَمُ", "جَدِيدٌ"] },
+            { level: 1.3, category: "L1C: Sifat (Nakirah)", indonesian: "Seorang guru (pr) yang pandai", correctWords: ["مُدَرِّسَةٌ", "مَاهِرَةٌ"], distractors: ["مُدَرِّسٌ", "مَاهِرٌ"] },
+            { level: 1.3, category: "L1C: Sifat (Nakirah)", indonesian: "Kemeja putih", correctWords: ["قَمِيصٌ", "أَبْيَضُ"], distractors: ["قَمِيصًا", "أَسْوَدُ"] },
+            { level: 1.3, category: "L1C: Sifat (Ma'rifah)", indonesian: "Peci yang hitam itu", correctWords: ["الْقَلَنْسُوَةُ", "السَّوْدَاءُ"], distractors: ["قَلَنْسُوَةٌ", "سَوْدَاءُ"] },
+            { level: 1.3, category: "L1C: Sifat (Ma'rifah)", indonesian: "Kemeja yang bersih itu", correctWords: ["الْقَمِيصُ", "النَّظِيفُ"], distractors: ["قَمِيصٌ", "نَظِيفٌ"] },
+            { level: 1.3, category: "L1C: Sifat (Ma'rifah)", indonesian: "Kelas yang luas itu", correctWords: ["الْفَصْلُ", "الْوَاسِعُ"], distractors: ["فَصْلٌ", "وَاسِعٌ"] },
+            { level: 1.3, category: "L1C: Sifat (Ma'rifah)", indonesian: "Sekolah yang besar itu", correctWords: ["الْمَدْرَسَةُ", "الْكَبِيرَةُ"], distractors: ["مَدْرَسَةٌ", "كَبِيرَةٌ"] },
+            { level: 1.3, category: "L1C: Sifat (Ma'rifah)", indonesian: "Jalan yang lurus itu", correctWords: ["الصِّرَاطُ", "الْمُسْتَقِيمُ"], distractors: ["صِرَاطٌ", "مُسْتَقِيمٌ"] },
 
-
-            // =================================================================
-            // LEVEL 2: JUMLAH ISMIYAH (Mubtada + Khobar)
-            // =================================================================
-            
-            // -- Khobar Mufrad (Kata Benda/Sifat) --
+            // === LEVEL 2: JUMLAH ISMIYAH ===
             { level: 2, category: "L2: Khobar Mufrad", indonesian: "Dokter itu mahir", correctWords: ["الطَّبِيبُ", "مَاهِرٌ"], distractors: ["مَاهِرَةٌ", "طَبِيبٌ"] },
             { level: 2, category: "L2: Khobar Mufrad", indonesian: "Gajah itu besar", correctWords: ["الْفِيلُ", "كَبِيرٌ"], distractors: ["صَغِيرٌ", "نَمْلٌ"] },
             { level: 2, category: "L2: Khobar Mufrad", indonesian: "Apel itu manis", correctWords: ["التُّفَّاحُ", "حُلْوٌ"], distractors: ["مُرٌّ", "حَامِضٌ"] },
@@ -163,31 +165,26 @@
             { level: 2, category: "L2: Khobar Mufrad", indonesian: "Kopi itu pahit", correctWords: ["الْقَهْوَةُ", "مُرَّةٌ"], distractors: ["حُلْوَةٌ", "قَهْوَةٌ"] },
             { level: 2, category: "L2: Khobar Mufrad", indonesian: "Pedagang itu kaya", correctWords: ["التَّاجِرُ", "غَنِيٌّ"], distractors: ["فَقِيرٌ", "تَاجِرٌ"] },
             { level: 2, category: "L2: Khobar Mufrad", indonesian: "Singa itu kuat", correctWords: ["الْأَسَدُ", "قَوِيٌّ"], distractors: ["ضَعِيفٌ", "أَسَدٌ"] },
-
-            // -- Khobar Syibhul Jumlah (Keterangan Tempat) --
             { level: 2, category: "L2: Khobar Syibhul Jumlah", indonesian: "Murid di dalam perpustakaan", correctWords: ["الطَّالِبُ", "فِي", "الْمَكْتَبَةِ"], distractors: ["عَلَى", "طَالِبٌ"] },
             { level: 2, category: "L2: Khobar Syibhul Jumlah", indonesian: "Mobil di depan rumah", correctWords: ["السَّيَّارَةُ", "أَمَامَ", "الْبَيْتِ"], distractors: ["وَرَاءَ", "بَيْتٌ"] },
             { level: 2, category: "L2: Khobar Syibhul Jumlah", indonesian: "Jam di atas dinding", correctWords: ["السَّاعَةُ", "عَلَى", "الْجِدَارِ"], distractors: ["فِي", "سَاعَةٌ"] },
             { level: 2, category: "L2: Khobar Syibhul Jumlah", indonesian: "Pakaian di dalam lemari", correctWords: ["الْمَلَابِسُ", "فِي", "الْخِزَانَةِ"], distractors: ["عَلَى", "خِزَانَةٌ"] },
             { level: 2, category: "L2: Khobar Syibhul Jumlah", indonesian: "Ikan di dalam air", correctWords: ["السَّمَكُ", "فِي", "الْمَاءِ"], distractors: ["عَلَى", "مَاءٌ"] },
             { level: 2, category: "L2: Khobar Syibhul Jumlah", indonesian: "Piring di atas meja", correctWords: ["الصَّحْنُ", "عَلَى", "الْمَكْتَبِ"], distractors: ["فِي", "صَحْنٌ"] },
-
-            // -- Kalimat Hikmah (Bonus Legend) --
+            { level: 2, category: "L2: Syibhul Jumlah", indonesian: "Hadits dari Abu Hurairah", correctWords: ["الْحَدِيثُ", "عَنْ", "أَبِي", "هُرَيْرَةَ"], distractors: ["فِي", "أَبَا"] },
             { level: 2, category: "L2: Kalimat Hikmah", indonesian: "Sholat itu cahaya", correctWords: ["الصَّلَاةُ", "نُورٌ"], distractors: ["صَلَاةٌ", "نُورًا"] },
             { level: 2, category: "L2: Kalimat Hikmah", indonesian: "Kebersihan itu sebagian dari iman", correctWords: ["النَّظَافَةُ", "مِنَ", "الْإِيمَانِ"], distractors: ["نَظَافَةٌ", "إِيمَانٌ"] },
+            { level: 2, category: "L2: Kalimat Hikmah", indonesian: "Segala puji bagi Allah", correctWords: ["الْحَمْدُ", "لِلَّهِ"], distractors: ["لِ", "اللهِ"] },
+            { level: 2, category: "L2: Kalimat Hikmah", indonesian: "Mukmin itu seperti bangunan", correctWords: ["الْمُؤْمِنُ", "كَالْبُنْيَانِ"], distractors: ["كَ", "بُنْيَانٌ"] },
 
-
-            // =================================================================
-            // LEVEL 3: JUMLAH FI'LIYAH (Fi'il + Fa'il / Dasar)
-            // =================================================================
-            
-            // -- Fi'il Madhi (Telah) -> Pengecoh: Mudhari --
+            // === LEVEL 3: JUMLAH FI'LIYAH ===
             { level: 3, category: "L3: Fi'il Madhi", indonesian: "Zaid telah pergi", correctWords: ["ذَهَبَ", "زَيْدٌ"], distractors: ["يَذْهَبُ", "زَيْدًا"] }, 
             { level: 3, category: "L3: Fi'il Madhi", indonesian: "Anak (lk) itu telah tidur", correctWords: ["نَامَ", "الْوَلَدُ"], distractors: ["يَنَامُ", "وَلَدًا"] }, 
             { level: 3, category: "L3: Fi'il Madhi", indonesian: "Ahmad telah minum", correctWords: ["شَرِبَ", "أَحْمَدُ"], distractors: ["يَشْرَبُ", "أَحْمَدَ"] }, 
             { level: 3, category: "L3: Fi'il Madhi", indonesian: "Hamid telah masuk", correctWords: ["دَخَلَ", "حَامِدٌ"], distractors: ["يَدْخُلُ", "خَرَجَ"] },
             { level: 3, category: "L3: Fi'il Madhi", indonesian: "Tamu itu telah datang", correctWords: ["جَاءَ", "الضَّيْفُ"], distractors: ["يَجِيءُ", "ضَيْفًا"] },
             { level: 3, category: "L3: Fi'il Madhi", indonesian: "Anak (lk) itu telah duduk", correctWords: ["جَلَسَ", "الْوَلَدُ"], distractors: ["يَجْلِسُ", "وَلَدٌ"] },
+            { level: 3, category: "L3: Fi'il Madhi", indonesian: "Orang kafir itu telah ingkar", correctWords: ["كَفَرَ", "الْكَافِرُ"], distractors: ["يَكْفُرُ", "كَافِرًا"] },
             { level: 3, category: "L3: Fi'il Madhi", indonesian: "Bayi itu telah tertawa", correctWords: ["ضَحِكَ", "الطِّفْلُ"], distractors: ["يَضْحَكُ", "طِفْلًا"] },
             { level: 3, category: "L3: Fi'il Madhi", indonesian: "Bapak telah sakit", correctWords: ["مَرِضَ", "الْأَبُ"], distractors: ["يَمْرَضُ", "أَبٌ"] },
             { level: 3, category: "L3: Fi'il Madhi", indonesian: "Anak-anak telah bermain", correctWords: ["لَعِبَ", "الْأَوْلَادُ"], distractors: ["يَلْعَبُ", "أَوْلَادًا"] },
@@ -195,8 +192,7 @@
             { level: 3, category: "L3: Fi'il Madhi", indonesian: "Ibu telah memberi izin", correctWords: ["أَذِنَتْ", "الْأُمُّ"], distractors: ["تَأْذَنُ", "أُمًّا"] },
             { level: 3, category: "L3: Fi'il Madhi", indonesian: "Guru (lk) telah berdiri", correctWords: ["قَامَ", "الْمُدَرِّسُ"], distractors: ["يَقُومُ", "مُدَرِّسًا"] },
             { level: 3, category: "L3: Fi'il Madhi", indonesian: "Siswa telah lulus (berhasil)", correctWords: ["نَجَحَ", "الطَّالِبُ"], distractors: ["يَنْجَحُ", "طَالِبًا"] },
-
-            // -- Fi'il Mudhari (Sedang) -> Pengecoh: Madhi --
+            { level: 3, category: "L3: Fi'il Madhi", indonesian: "Orang muslim telah ruku'", correctWords: ["رَكَعَ", "الْمُسْلِمُ"], distractors: ["يَرْكَعُ", "مُسْلِمًا"] },
             { level: 3, category: "L3: Fi'il Mudhari", indonesian: "Fatimah sedang menulis", correctWords: ["تَكْتُبُ", "فَاطِمَةُ"], distractors: ["كَتَبَتْ", "فَاطِمَةَ"] }, 
             { level: 3, category: "L3: Fi'il Mudhari", indonesian: "Aisyah sedang membaca", correctWords: ["تَقْرَأُ", "عَائِشَةُ"], distractors: ["قَرَأَتْ", "عَائِشَةَ"] }, 
             { level: 3, category: "L3: Fi'il Mudhari", indonesian: "Zaid sedang berdiri", correctWords: ["يَقُومُ", "زَيْدٌ"], distractors: ["قَامَ", "زَيْدًا"] }, 
@@ -212,44 +208,79 @@
             { level: 3, category: "L3: Fi'il Mudhari", indonesian: "Pemain sedang berlari", correctWords: ["يَجْرِي", "اللَّاعِبُ"], distractors: ["جَرَى", "لَاعِبًا"] },
             { level: 3, category: "L3: Fi'il Mudhari", indonesian: "Orang muslim sedang sujud", correctWords: ["يَسْجُدُ", "الْمُسْلِمُ"], distractors: ["سَجَدَ", "مُسْلِمًا"] },
 
-
-            // =================================================================
-            // LEVEL 4: MAHIR (KALIMAT KOMPLEKS / SPOK / LENGKAP)
-            // =================================================================
-            
-            // -- Objek Ma'rifah (Tertentu/Itu) --
-            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Ibu sedang memasak nasi itu", correctWords: ["تَطْبُخُ", "الْأُمُّ", "الرُّزَّ"], distractors: ["طَبَخَتْ", "الرُّزُّ"] }, 
-            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Ahmad telah membuka pintu itu", correctWords: ["فَتَحَ", "أَحْمَدُ", "الْبَابَ"], distractors: ["يَفْتَحُ", "الْبَابُ"] }, 
-            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Fatimah sedang menutup jendela itu", correctWords: ["تُغْلِقُ", "فَاطِمَةُ", "النَّافِذَةَ"], distractors: ["أَغْلَقَ", "النَّافِذَةُ"] }, 
+            // === LEVEL 4: MAHIR (SPOK / KOMPLEKS / ALTERNATIF JAWABAN) ===
+            { 
+                level: 4, 
+                category: "L4: Kalimat Lengkap", 
+                indonesian: "Ibu sedang mencuci piring kotor", 
+                correctWords: ["تَغْسِلُ", "الْأُمُّ", "الصَّحْنَ", "الْوَسِخَ"], 
+                distractors: ["صَحْنًا", "وَسِخًا"], 
+                alternatives: [["تَغْسِلُ", "الْأُمُّ", "صَحْنًا", "وَسِخًا"]] 
+            },
+            { 
+                level: 4, 
+                category: "L4: Kalimat Lengkap", 
+                indonesian: "Ibu sedang memasak makanan", 
+                correctWords: ["تَطْبُخُ", "الْأُمُّ", "الطَّعَامَ"], 
+                distractors: ["طَعَامًا", "طَبَخَتْ"],
+                alternatives: [["تَطْبُخُ", "الْأُمُّ", "طَعَامًا"]] 
+            },
+            { 
+                level: 4, 
+                category: "L4: Kalimat Lengkap", 
+                indonesian: "Saya sedang membaca buku", 
+                correctWords: ["أَقْرَأُ", "الْكِتَابَ"], 
+                distractors: ["كِتَابًا", "قَرَأْتُ"],
+                alternatives: [["أَقْرَأُ", "كِتَابًا"]] 
+            },
+            { 
+                level: 4, 
+                category: "L4: Kalimat Lengkap", 
+                indonesian: "Zaid sedang meminum kopi panas", 
+                correctWords: ["يَشْرَبُ", "زَيْدٌ", "الْقَهْوَةَ", "الْحَارَّةَ"], 
+                distractors: ["قَهْوَةً", "حَارَّةً", "شَرِبَ"],
+                alternatives: [["يَشْرَبُ", "زَيْدٌ", "قَهْوَةً", "حَارَّةً"]] 
+            },
+            { 
+                level: 4, 
+                category: "L4: Kalimat Lengkap", 
+                indonesian: "Pedagang sedang menjual kemeja baru", 
+                correctWords: ["يَبِيعُ", "التَّاجِرُ", "الْقَمِيصَ", "الْجَدِيدَ"], 
+                distractors: ["قَمِيصًا", "جَدِيدًا", "بَاعَ"],
+                alternatives: [["يَبِيعُ", "التَّاجِرُ", "قَمِيصًا", "جَدِيدًا"]] 
+            },
+            { 
+                level: 4, 
+                category: "L4: Kalimat Lengkap", 
+                indonesian: "Ayah sedang membeli mobil", 
+                correctWords: ["يَشْتَرِي", "الْأَبُ", "السَّيَّارَةَ"], 
+                distractors: ["سَيَّارَةً", "اِشْتَرَى"],
+                alternatives: [["يَشْتَرِي", "الْأَبُ", "سَيَّارَةً"]] 
+            },
+            { 
+                level: 4, 
+                category: "L4: Kalimat Lengkap", 
+                indonesian: "Hujan sedang turun dari langit", 
+                correctWords: ["يَنْزِلُ", "الْمَطَرُ", "مِنَ", "السَّمَاءِ"], 
+                distractors: ["سَمَاءٍ", "نَزَلَ"],
+                alternatives: [["يَنْزِلُ", "الْمَطَرُ", "مِنْ", "سَمَاءٍ"]] 
+            },
+            // Soal Level 4 Standar
             { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Siswa sedang menghafal pelajaran itu", correctWords: ["يَحْفَظُ", "الطَّالِبُ", "الدَّرْسَ"], distractors: ["حَفِظَ", "الدَّرْسُ"] }, 
-            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Saya sedang melihat bulan itu", correctWords: ["أَنْظُرُ", "الْقَمَرَ"], distractors: ["نَظَرْتُ", "الْقَمَرُ"] }, 
-            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Pedagang sedang menjual baju itu", correctWords: ["يَبِيعُ", "التَّاجِرُ", "الْقَمِيصَ"], distractors: ["بَاعَ", "الْقَمِيصُ"] },
-            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Ayah sedang membeli mobil itu", correctWords: ["يَشْتَرِي", "الْأَبُ", "السَّيَّارَةَ"], distractors: ["اِشْتَرَى", "السَّيَّارَةُ"] },
-            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Pemain sedang memukul bola itu", correctWords: ["يَضْرِبُ", "اللَّاعِبُ", "الْكُرَةَ"], distractors: ["ضَرَبَ", "الْكُرَةُ"] },
-            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Ibu sedang membersihkan rumah itu", correctWords: ["تُنَظِّفُ", "الْأُمُّ", "الْبَيْتَ"], distractors: ["نَظَّفَتْ", "الْبَيْتُ"] },
-            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Kucing itu sedang makan ikan itu", correctWords: ["يَأْكُلُ", "الْقِطُّ", "السَّمَكَ"], distractors: ["أَكَلَ", "سَمَكًا"] },
-            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Petani (lk) telah menanam jagung itu", correctWords: ["زَرَعَ", "الْفَلَّاحُ", "الذُّرَةَ"], distractors: ["يَزْرَعُ", "ذُرَةٌ"] },
-            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Kita telah makan nasi itu", correctWords: ["أَكَلْنَا", "الرُّزَّ"], distractors: ["نَأْكُلُ", "رُزًّا"] },
-            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Ayah telah memasukkan mobil itu", correctWords: ["أَدْخَلَ", "الْأَبُ", "السَّيَّارَةَ"], distractors: ["يُدْخِلُ", "سَيَّارَةً"] },
-            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Saya telah memadamkan lampu itu", correctWords: ["أَطْفَأْتُ", "الْمِصْبَاحَ"], distractors: ["أُطْفِئُ", "مِصْبَاحًا"] },
+            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Kita sedang bersyukur kepada Allah", correctWords: ["نَشْكُرُ", "اللهَ"], distractors: ["شَكَرْنَا", "اللهُ"] }, 
+            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Allah sedang memerintah sholat", correctWords: ["يَأْمُرُ", "اللهُ", "بِالصَّلَاةِ"], distractors: ["أَمَرَ", "صَلَاةً"] },
             { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Siswa telah mengambil pena itu", correctWords: ["أَخَذَ", "الطَّالِبُ", "الْقَلَمَ"], distractors: ["يَأْخُذُ", "قَلَمًا"] },
-
-            // -- Objek Nakirah (Umum/Sebuah) --
-            { level: 4, category: "L4: Objek Nakirah", indonesian: "Saya sedang membaca sebuah buku", correctWords: ["أَقْرَأُ", "كِتَابًا"], distractors: ["قَرَأْتُ", "كِتَابٌ"] }, 
-            { level: 4, category: "L4: Objek Nakirah", indonesian: "Saya sedang membuka sebuah pintu", correctWords: ["أَفْتَحُ", "بَابًا"], distractors: ["فَتَحْتُ", "بَابٌ"] }, 
-            { level: 4, category: "L4: Objek Nakirah", indonesian: "Ayah sedang membeli sebuah mobil", correctWords: ["يَشْتَرِي", "الْأَبُ", "سَيَّارَةً"], distractors: ["اِشْتَرَى", "سَيَّارَةٌ"] },
-            { level: 4, category: "L4: Objek Nakirah", indonesian: "Siswa sedang menulis sebuah pelajaran", correctWords: ["يَكْتُبُ", "الطَّالِبُ", "دَرْسًا"], distractors: ["كَتَبَ", "دَرْسٌ"] },
-            { level: 4, category: "L4: Objek Nakirah", indonesian: "Ibu sedang memasak makanan", correctWords: ["تَطْبُخُ", "الْأُمُّ", "طَعَامًا"], distractors: ["طَعَامٌ", "طَبَخَتْ"] },
-            { level: 4, category: "L4: Objek Nakirah", indonesian: "Pedagang sedang menjual kemeja baru", correctWords: ["يَبِيعُ", "التَّاجِرُ", "قَمِيصًا", "جَدِيدًا"], distractors: ["قَمِيصٌ", "جَدِيدٌ"] },
-            { level: 4, category: "L4: Objek Nakirah", indonesian: "Zaid sedang meminum kopi panas", correctWords: ["يَشْرَبُ", "زَيْدٌ", "قَهْوَةً", "حَارَّةً"], distractors: ["شَرِبَ", "حَارٌّ"] },
-            { level: 4, category: "L4: Objek Nakirah", indonesian: "Saya sedang minum air dingin", correctWords: ["أَشْرَبُ", "مَاءً", "بَارِدًا"], distractors: ["شَرِبْتُ", "مَاءً"] },
-            { level: 4, category: "L4: Objek Nakirah", indonesian: "Guru (lk) sedang membawa buku baru", correctWords: ["يَحْمِلُ", "الْمُدَرِّسُ", "كِتَابًا", "جَدِيدًا"], distractors: ["حَمَلَ", "كِتَابٌ"] },
-            { level: 4, category: "L4: Objek Nakirah", indonesian: "Zaid sedang menyalakan api", correctWords: ["يُشْعِلُ", "زَيْدٌ", "نَارًا"], distractors: ["أَشْعَلَ", "نَارٌ"] },
-            { level: 4, category: "L4: Objek Nakirah", indonesian: "Ibu sedang mengeluarkan makanan", correctWords: ["تُخْرِجُ", "الْأُمُّ", "طَعَامًا"], distractors: ["أَخْرَجَتْ", "طَعَامٌ"] },
-
-            // -- Kalimat Kompleks Lainnya (SPOK / Keterangan) --
+            { level: 4, category: "L4: Huruf Jar (Bi)", indonesian: "Saya sedang menulis dengan pena", correctWords: ["أَكْتُبُ", "بِالْقَلَمِ"], distractors: ["كَتَبْتُ", "قَلَمًا"] },
+            { level: 4, category: "L4: Huruf Jar (Bi)", indonesian: "Kita sedang pergi dengan mobil", correctWords: ["نَذْهَبُ", "بِالسَّيَّارَةِ"], distractors: ["ذَهَبْنَا", "سَيَّارَةً"] },
+            { level: 4, category: "L4: Huruf Jar (Bi)", indonesian: "Zaid telah memukul anjing dengan batu", correctWords: ["ضَرَبَ", "زَيْدٌ", "الْكَلْبَ", "بِالْحَجَرِ"], distractors: ["يَضْرِبُ", "حَجَرًا"] },
+            { level: 4, category: "L4: Huruf Jar (Li)", indonesian: "Buku ini milik Muhammad", correctWords: ["هَذَا", "الْكِتَابُ", "لِمُحَمَّدٍ"], distractors: ["لِ", "مُحَمَّدٌ"] },
+            { level: 4, category: "L4: Huruf Jar (Ka)", indonesian: "Wajahmu seperti bulan", correctWords: ["وَجْهُكَ", "كَالْقَمَرِ"], distractors: ["كَ", "قَمَرٌ"] },
+            { level: 4, category: "L4: 'Athof (Wa)", indonesian: "Langit dan Bumi", correctWords: ["السَّمَاءُ", "وَ", "الْأَرْضُ"], distractors: ["أَرْضًا", "فِي"] },
+            { level: 4, category: "L4: 'Athof (Wa)", indonesian: "Allah sedang menghidupkan dan mematikan", correctWords: ["يُحْيِي", "اللهُ", "وَ", "يُمِيتُ"], distractors: ["أَحْيَا", "أَمَاتَ"] },
+            { level: 4, category: "L4: 'Athof (Au)", indonesian: "Kamu mau teh atau kopi?", correctWords: ["تُرِيدُ", "شَايًا", "أَوْ", "قَهْوَةً"], distractors: ["شَايٌ", "قَهْوَةٌ"] },
+            { level: 4, category: "L4: 'Athof (Tsumma)", indonesian: "Zaid telah datang kemudian Umar", correctWords: ["جَاءَ", "زَيْدٌ", "ثُمَّ", "عُمَرُ"], distractors: ["أَوْ", "عُمَرًا"] },
+            { level: 4, category: "L4: 'Athof (Am)", indonesian: "Apakah kamu tidur atau bangun?", correctWords: ["أَنَائِمٌ", "أَنْتَ", "أَمْ", "مُسْتَيْقِظٌ"], distractors: ["أَوْ", "نَائِمًا"] },
             { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Saya sedang sholat di masjid berjamaah", correctWords: ["أُصَلِّي", "فِي", "الْمَسْجِدِ", "جَمَاعَةً"], distractors: ["صَلَّيْتُ", "مُصَلَّى"] }, 
-            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Zaid telah memukul anjing dengan batu", correctWords: ["ضَرَبَ", "زَيْدٌ", "الْكَلْبَ", "بِالْحَجَرِ"], distractors: ["يَضْرِبُ", "حَجَرًا"] },
             { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Fatimah sedang menutup pintu rumah", correctWords: ["تُغْلِقُ", "فَاطِمَةُ", "بَابَ", "الْبَيْتِ"], distractors: ["أَغْلَقَتْ", "بَابًا"] },
             { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Ayah sedang pulang dari kantor", correctWords: ["يَرْجِعُ", "الْأَبُ", "مِنَ", "الْمَكْتَبِ"], distractors: ["رَجَعَ", "إِلَى"] },
             { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Petani telah pergi ke sawah pagi hari", correctWords: ["ذَهَبَ", "الْفَلَّاحُ", "إِلَى", "الْمَزْرَعَةِ", "صَبَاحًا"], distractors: ["يَذْهَبُ", "مَسَاءً"] },
@@ -259,23 +290,13 @@
             { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Ibu sedang mencuci piring kotor", correctWords: ["تَغْسِلُ", "الْأُمُّ", "الصَّحْنَ", "الْوَسِخَ"], distractors: ["صَحْنًا", "وَسِخًا"] },
             { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Guru (lk) sedang berdiri di depan kelas", correctWords: ["يَقُومُ", "الْمُدَرِّسُ", "أَمَامَ", "الْفَصْلِ"], distractors: ["قَامَ", "وَرَاءَ"] },
             { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Hujan sedang turun dari langit", correctWords: ["يَنْزِلُ", "الْمَطَرُ", "مِنَ", "السَّمَاءِ"], distractors: ["نَزَلَ", "سَمَاءٍ"] },
-            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Allah sedang menghidupkan dan mematikan", correctWords: ["يُحْيِي", "اللهُ", "وَ", "يُمِيتُ"], distractors: ["أَحْيَا", "أَمَاتَ"] },
             { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Zaid sedang menginginkan air", correctWords: ["يُرِيدُ", "زَيْدٌ", "الْمَاءَ"], distractors: ["أَرَادَ", "مَاءً"] },
             { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Siswa telah meminjam buku dari perpustakaan", correctWords: ["اِسْتَعَارَ", "الطَّالِبُ", "الْكِتَابَ", "مِنَ", "الْمَكْتَبَةِ"], distractors: ["يَسْتَعِيرُ", "كِتَابًا"] },
-            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Saya sedang membantu ibu di dapur", correctWords: ["أُسَاعِدُ", "الْأُمَّ", "فِي", "الْمَطْبَخِ"], distractors: ["سَاعَدْتُ", "أُمًّا"] },
-            
-            // -- Legend / Hikmah / Hadits --
-            { level: 4, category: "L4: Kalimat Hikmah", indonesian: "Sholat itu tiang agama", correctWords: ["الصَّلَاةُ", "عِمَادُ", "الدِّينِ"], distractors: ["صَلَاةٌ", "دِينًا"] },
-            { level: 4, category: "L4: Kalimat Hikmah", indonesian: "Surga itu di bawah telapak kaki ibu", correctWords: ["الْجَنَّةُ", "تَحْتَ", "أَقْدَامِ", "الْأُمَّهَاتِ"], distractors: ["جَنَّةٌ", "فَوْقَ"] },
-            { level: 4, category: "L4: Kalimat Hikmah", indonesian: "Menuntut ilmu itu wajib bagi setiap muslim", correctWords: ["طَلَبُ", "الْعِلْمِ", "فَرِيضَةٌ", "عَلَى", "كُلِّ", "مُسْلِمٍ"], distractors: ["طَالِبُ", "عِلْمًا"] },
-            { level: 4, category: "L4: Objek Ma'rifah", indonesian: "Allah telah menciptakan langit", correctWords: ["خَلَقَ", "اللهُ", "السَّمَاءَ"], distractors: ["يَخْلُقُ", "سَمَاءً"] },
-            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Orang mukmin masuk surga dengan rahmat Allah", correctWords: ["يَدْخُلُ", "الْمُؤْمِنُ", "الْجَنَّةَ", "بِرَحْمَةِ", "اللهِ"], distractors: ["دَخَلَ", "جَنَّةً"] },
-            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Amal itu tergantung niat", correctWords: ["الْأَعْمَالُ", "بِالنِّيَّاتِ"], distractors: ["عَمَلٌ", "نِيَّةٌ"] },
-            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Orang muslim itu saudara orang muslim", correctWords: ["الْمُسْلِمُ", "أَخُو", "الْمُسْلِمِ"], distractors: ["مُسْلِمٌ", "أَخَا"] }
+            { level: 4, category: "L4: Kalimat Lengkap", indonesian: "Saya sedang membantu ibu di dapur", correctWords: ["أُسَاعِدُ", "الْأُمَّ", "فِي", "الْمَطْبَخِ"], distractors: ["سَاعَدْتُ", "أُمًّا"] }
         ];
 
         // --- UTILS & STORAGE ---
-        const LEADERBOARD_KEY = 'tarkib_legend_leaderboard_v1';
+        const LEADERBOARD_KEY = 'tarkib_legend_leaderboard_v2'; // Update key
         
         const getLeaderboard = () => {
             const stored = localStorage.getItem(LEADERBOARD_KEY);
@@ -373,7 +394,9 @@
 
         const LevelSelect = ({ onSelectLevel, onBack }) => {
             const levels = [
-                { id: 1, title: "Level 1", subtitle: "Frasa Dasar", desc: "Jar Majrur, Idhafah, Sifat" },
+                { id: 1.1, title: "Level 1A", subtitle: "Jar Majrur & Zharaf", desc: "Contoh: Di atas meja, Di depan kelas" },
+                { id: 1.2, title: "Level 1B", subtitle: "Idhafah (Sandaran)", desc: "Contoh: Pintu masjid, Kitab Allah" },
+                { id: 1.3, title: "Level 1C", subtitle: "Na'at Man'ut (Sifat)", desc: "Contoh: Buku baru, Rumah besar" },
                 { id: 2, title: "Level 2", subtitle: "Jumlah Ismiyah", desc: "Mubtada & Khobar" },
                 { id: 3, title: "Level 3", subtitle: "Jumlah Fi'liyah", desc: "Fi'il Madhi & Mudhari" },
                 { id: 4, title: "Level 4", subtitle: "Mahir", desc: "Kalimat Kompleks & SPOK" }
@@ -385,7 +408,7 @@
                         <div className="grid grid-cols-1 gap-3">
                             {levels.map((lvl) => (
                                 <button key={lvl.id} onPointerDown={(e) => { e.preventDefault(); onSelectLevel(lvl.id); }} className="flex items-center p-4 rounded-xl border-2 border-emerald-100 hover:border-emerald-500 hover:bg-emerald-50 transition group text-left w-full">
-                                    <div className="bg-emerald-100 text-emerald-600 font-bold w-12 h-12 rounded-full flex items-center justify-center text-xl group-hover:bg-emerald-500 group-hover:text-white transition">{lvl.id}</div>
+                                    <div className="bg-emerald-100 text-emerald-600 font-bold w-12 h-12 rounded-full flex items-center justify-center text-xl group-hover:bg-emerald-500 group-hover:text-white transition">{Math.floor(lvl.id)}</div>
                                     <div className="ml-4"><h3 className="font-bold text-gray-800 text-lg">{lvl.title}: {lvl.subtitle}</h3><p className="text-sm text-gray-500">{lvl.desc}</p></div>
                                 </button>
                             ))}
@@ -418,11 +441,27 @@
             </div>
         );
 
+        const RulesModal = ({ onClose }) => (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in" onPointerDown={(e) => e.stopPropagation()}>
+                <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl pop-in">
+                    <h2 className="text-2xl font-bold text-emerald-800 mb-4 border-b pb-2">Aturan Permainan</h2>
+                    <ul className="space-y-3 text-gray-700 mb-6 text-sm">
+                        <li className="flex gap-2"><span className="text-emerald-500 font-bold">1.</span> Pilih Level yang ingin dimainkan.</li>
+                        <li className="flex gap-2"><span className="text-emerald-500 font-bold">2.</span> Susun kata Arab sesuai terjemahan.</li>
+                        <li className="flex gap-2"><span className="text-emerald-500 font-bold">3.</span> <span className="font-bold">Tantangan Waktu:</span> Soal pertama 60 detik, semakin lama semakin cepat.</li>
+                        <li className="flex gap-2"><span className="text-emerald-500 font-bold">4.</span> Gunakan tombol "Papan Skor" untuk mendownload data nilai siswa.</li>
+                    </ul>
+                    <button onPointerDown={(e) => {e.preventDefault(); onClose();}} className="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-700">Tutup</button>
+                </div>
+            </div>
+        );
+
         const GameBoard = ({ isDuel = false, playerName = "Player", playerIndex = 1, questionData, questionIndex, onCorrect, onWrong, score }) => {
             const [availableWords, setAvailableWords] = React.useState([]);
             const [selectedWords, setSelectedWords] = React.useState([]);
             const [localState, setLocalState] = React.useState('playing');
             const [shake, setShake] = React.useState(false);
+            const [wrongIndices, setWrongIndices] = React.useState([]);
             const [timeLeft, setTimeLeft] = React.useState(60);
 
             const calculateInitialTime = (idx) => (idx === 0 ? 60 : idx === 1 ? 50 : 40);
@@ -436,6 +475,7 @@
                     setAvailableWords(shuffleArray(allWords));
                     setSelectedWords([]);
                     setLocalState('playing');
+                    setWrongIndices([]);
                     setTimeLeft(calculateInitialTime(questionIndex)); 
                 }
             }, [questionData, questionIndex]);
@@ -463,6 +503,7 @@
                 if(localState === 'correct') return;
                 setAvailableWords(prev => prev.filter(w => w.id !== word.id));
                 setSelectedWords(prev => [...prev, word]); 
+                setWrongIndices([]); 
             };
 
             const handleSelectedClick = (e, word) => {
@@ -471,20 +512,50 @@
                 setSelectedWords(prev => prev.filter(w => w.id !== word.id));
                 setAvailableWords(prev => [...prev, word]);
                 setLocalState('playing');
+                setWrongIndices([]); 
             };
 
             const checkAnswer = (e) => {
                 e.preventDefault(); 
                 if(localState === 'correct') return;
-                const isLengthMatch = selectedWords.length === questionData.correctWords.length;
-                const isContentMatch = selectedWords.every((w, i) => w.text === questionData.correctWords[i]);
+                
+                // --- LOGIKA KOREKSI JAWABAN (UTAMA + ALTERNATIF) ---
+                const targets = [questionData.correctWords, ...(questionData.alternatives || [])];
+                
+                const isCorrect = targets.some(target => 
+                    selectedWords.length === target.length &&
+                    selectedWords.every((w, i) => w.text === target[i])
+                );
 
-                if (isLengthMatch && isContentMatch) {
+                if (isCorrect) {
                     playCorrectSound();
                     setLocalState('correct');
                     onCorrect();
                 } else {
-                    handleWrongLogic();
+                    playWrongSound();
+                    setLocalState('wrong');
+                    setShake(true);
+                    setTimeout(() => setShake(false), 500);
+
+                    if (!isDuel) {
+                        let bestMatchIndices = [];
+                        let minMismatchCount = Infinity;
+
+                        targets.forEach(target => {
+                            let mismatches = [];
+                            selectedWords.forEach((w, i) => {
+                                if (!target[i] || w.text !== target[i]) {
+                                    mismatches.push(i);
+                                }
+                            });
+                            if (mismatches.length < minMismatchCount) {
+                                minMismatchCount = mismatches.length;
+                                bestMatchIndices = mismatches;
+                            }
+                        });
+                        setWrongIndices(bestMatchIndices);
+                    }
+                    onWrong();
                 }
             };
 
@@ -504,11 +575,15 @@
                     </div>
                     <div dir="rtl" className={`p-3 min-h-[120px] bg-white border-y border-gray-100 flex flex-wrap gap-2 justify-center items-center content-center transition-colors ${localState === 'wrong' ? 'bg-red-50' : ''}`}>
                         {selectedWords.length === 0 && <span className="text-sm text-gray-300 italic dir-ltr select-none">Susun kata di sini</span>}
-                        {selectedWords.map(w => (
-                            <button key={w.id} onPointerDown={(e) => handleSelectedClick(e, w)} className={`arabic-text ${dynamicAnswerFont} px-3 py-2 bg-white border-2 border-emerald-300 rounded-xl shadow-md hover:bg-red-50 hover:border-red-300 transition-all ${shake ? 'text-red-500 border-red-500' : 'text-gray-800'}`}>
-                                {w.text}
-                            </button>
-                        ))}
+                        {selectedWords.map((w, i) => {
+                            const isWrong = wrongIndices.includes(i);
+                            const btnStyle = isWrong ? "bg-red-100 border-red-500 text-red-600 animate-pulse" : "bg-white border-emerald-300 text-gray-800 hover:bg-red-50 hover:border-red-300";
+                            return (
+                                <button key={w.id} onPointerDown={(e) => handleSelectedClick(e, w)} className={`arabic-text ${dynamicAnswerFont} px-3 py-2 border-2 rounded-xl shadow-md transition-all ${btnStyle}`}>
+                                    {w.text}
+                                </button>
+                            );
+                        })}
                     </div>
                     <div className="p-4 bg-gray-50 flex flex-wrap gap-3 justify-center min-h-[120px] content-start overflow-y-auto">
                         {availableWords.map(w => (
@@ -557,7 +632,6 @@
                 setSelectedLevel(levelId);
                 const filtered = gameDataDatabase.filter(q => q.level === levelId);
                 const shuffled = shuffleArray(filtered);
-                // LIMIT SESSION TO 20 QUESTIONS MAX to ensure variety across plays
                 const sessionSet = shuffled.slice(0, 20); 
                 setSessionQuestions(sessionSet);
                 setQuestionIdx(0);
@@ -582,7 +656,6 @@
                 setSpLives(l => l - 1);
                 if (spLives <= 1) {
                     setSpFinished(true);
-                    playWrongSound();
                     saveScoreToLeaderboard(p1Name, spScore, selectedLevel);
                 }
             };
